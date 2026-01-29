@@ -1,0 +1,72 @@
+/* admin-dashboard.component.scss */
+.vendor-details-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 90vw;
+  z-index: 1050;
+  
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+  }
+  
+  .sidebar-content {
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid #dee2e6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .sidebar-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+    }
+  }
+}
+
+.details-list {
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .label {
+      font-weight: 600;
+      color: #666;
+    }
+    
+    .value {
+      color: #333;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-word;
+    }
+  }
+}
+
+.vendor-avatar {
+  font-weight: bold;
+}

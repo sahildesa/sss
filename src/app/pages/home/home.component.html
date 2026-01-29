@@ -1,0 +1,425 @@
+<!-- Hero Section -->
+<div class="hero-container position-relative d-flex align-items-center min-vh-100 text-white">
+<img src="assets/images/home/global-network.jpg" class="hero-bg" alt="Global Network">
+<div class="overlay"></div>
+<div class="container position-relative">
+<div class="d-flex align-items-center justify-content-center justify-content-md-start mb-3">
+<span class="me-2">
+<svg width="30" height="30" viewBox="0 0 28 28" fill="none">
+<circle cx="12" cy="12" r="12" fill="white" stroke="black" stroke-width="1"/>
+<polygon points="10,8 16,12 10,16" fill="black"/>
+</svg>
+</span>
+<span>
+Learn about <span class="fw-bold">southernsourcingsupply.com</span>
+</span>
+</div>
+<h1 class="fw-bold display-5 mb-4">
+Powering Global Connections in B2B Commerce
+</h1>
+<div class="input-group shadow-lg rounded-pill bg-white overflow-hidden mx-auto mx-md-0">
+<input type="text" class="form-control border-0 ps-3"
+             placeholder="What are you looking for?"
+             [(ngModel)]="searchQuery">
+<button class="btn btn-danger px-4 rounded-pill" (click)="onSearch()">Search</button>
+</div>
+</div>
+</div>
+
+
+
+
+<section class="category-section py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold mb-4">Browse By Category</h2>
+    <div class="row g-4">
+      <div class="col-6 col-md-4 col-lg-2"
+           *ngFor="let category of categories; let i = index"
+           (click)="selectCategory(i)">
+        <div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+             [ngClass]="{
+               'bg-danger text-white': i === selectedCategoryIndex,
+               'bg-white text-dark': i !== selectedCategoryIndex
+             }">
+          <img [src]="category.icon" [alt]="category.name" class="img-fluid mx-auto mb-2" style="max-height:60px;">
+          <p class="mb-0 fw-medium">{{ category.name }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- Explore Section Carousel -->
+<div id="exploreCarousel" class="carousel slide">
+<!-- Indicators -->
+<div class="carousel-indicators">
+<button *ngFor="let slide of slides; let i = index"
+            type="button"
+            data-bs-target="#exploreCarousel"
+            [attr.data-bs-slide-to]="i"
+            [class.active]="i===0"
+            [attr.aria-current]="i===0 ? 'true' : null"
+            [attr.aria-label]="'Slide ' + (i+1)">
+</button>
+</div>
+<!-- Slides -->
+<div class="carousel-inner">
+<!-- Slide 1 -->
+<div class="carousel-item active">
+<div class="explore-container position-relative text-white slide1-only">
+<img src="assets/images/home/cups-cover.jpg" class="explore-bg w-100" alt="Coffee Cups">
+<div class="container position-relative text-center text-md-start">
+<p class="small fw-semibold text-uppercase mb-2">
+            STTOKE Limited Edition Leakproof Ceramic Insulated Cup Powder Coating 16oz
+</p>
+<h1 class="fw-bold display-5 mb-4">Every Sip Like <br> Your First</h1>
+<button class="btn btn-danger btn-lg px-4 py-2 rounded-3">Explore More</button>
+</div>
+<!-- Bottom right thumbnail -->
+<div class="position-absolute bottom-0 end-0 m-4">
+<img src="assets/images/home/cups-color.jpeg" class="rounded shadow explore-thumb" alt="Cup Collection">
+</div>
+<!-- Floating mini card bottom left -->
+<div class="position-absolute bottom-0 start-0 m-3 d-flex align-items-center bg-white rounded shadow explore-mini">
+<div class="explore-mini-img-box d-flex align-items-center justify-content-center me-3">
+<img src="assets/images/home/orange-cup.webp" alt="Cup" width="40">
+</div>
+<div class="d-flex flex-column justify-content-center">
+<p class="mb-0 small fw-bold">STTOKE Limited Edition</p>
+<small class="text-muted">Leakproof Cup Powder Coating 16oz</small><br>
+<small class="text-orange">1 hour ago</small>
+</div>
+</div>
+</div>
+</div>
+<!-- Slide 2 -->
+<div class="carousel-item">
+<div class="explore-container position-relative text-white p-0">
+<!-- Full width 3-column images -->
+<div class="full-columns row g-0">
+<div class="col-4">
+<img src="assets/images/home/Banner-sttoke1.webp" alt="Mug 3">
+</div>
+<div class="col-4">
+<img src="assets/images/home/Banner-sttoke3.webp" alt="Mug 5">
+</div>
+<div class="col-4">
+<img src="assets/images/home/Banner-sttoke2.webp" alt="Mug 4">
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Controls -->
+<button class="carousel-control-prev" type="button" data-bs-target="#exploreCarousel" data-bs-slide="prev">
+<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+<span class="visually-hidden">Previous</span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#exploreCarousel" data-bs-slide="next">
+<span class="carousel-control-next-icon" aria-hidden="true"></span>
+<span class="visually-hidden">Next</span>
+</button>
+</div>
+
+
+
+
+<!-- Discover Section -->
+<section class="discover-section py-5">
+<div class="container">
+<h2 class="discover-title fw-bold text-center mb-5">
+<span class="dark-text">Discover your next</span>
+<span class="gradient-text"> business opportunity.</span>
+</h2>
+<div class="row g-4">
+<!-- Left Column -->
+<div class="col-md-4 d-flex flex-column gap-4">
+<!-- Top Ranking -->
+<div class="discover-card h-100 d-flex flex-column">
+<div class="d-flex justify-content-between align-items-center mb-2">
+<span class="small fw-bold">Top ranking</span>
+<a href="#" class="btn-view">view more</a>
+</div>
+<img src="assets/images/home/bagpack1.jpg" alt="Backpack" class="main-img img-fluid flex-grow-1">
+<div class="row g-2 mt-2">
+<div class="col-6">
+<img src="assets/images/home/bag1.png" class="sub-img img-fluid" alt="Bag 1">
+</div>
+<div class="col-6">
+<img src="assets/images/home/bag2.png" class="sub-img img-fluid" alt="Bag 2">
+</div>
+</div>
+<button class="arrow-btn"> 
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M10.146 4.146a.5.5 0 0 1 .708 0L14 7.293l-3.146 3.147a.5.5 0 0 1-.708-.708L12.293 8H2.5a.5.5 0 0 1 0-1h9.793L10.146 4.854a.5.5 0 0 1 0-.708z"/> 
+</svg> 
+</button>
+</div>
+</div>
+<!-- Center Column -->
+<div class="col-md-4 d-flex flex-column gap-4">
+<!-- New Arrivals -->
+<div class="discover-card h-100 d-flex flex-column">
+<div class="d-flex justify-content-between align-items-center mb-2">
+<span class="small fw-bold">New arrivals</span>
+<a href="#" class="btn-view">view more</a>
+</div>
+<p class="small text-muted">130,000+ products added today</p>
+<img src="assets/images/home/coffee.avif" alt="Cup" class="main-img img-fluid flex-grow-1">
+<button class="arrow-btn mt-auto"> 
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M10.146 4.146a.5.5 0 0 1 .708 0L14 7.293l-3.146 3.147a.5.5 0 0 1-.708-.708L12.293 8H2.5a.5.5 0 0 1 0-1h9.793L10.146 4.854a.5.5 0 0 1 0-.708z"/> 
+</svg> 
+</button>
+</div>
+<!-- New This Week (image left, text right) -->
+<div class="discover-card new-this-week h-100">
+<img src="assets/images/home/new.avif" alt="Wallet" class="main-img">
+<div class="text-content">
+<span class="small fw-bold d-block mb-2">New this week</span>
+<p class="small text-muted">Products from Verified Suppliers only</p>
+</div>
+</div>
+</div>
+<!-- Right Column -->
+<div class="col-md-4 d-flex flex-column gap-4">
+<!-- Top Deals (text left, image right) -->
+<div class="discover-card top-deals h-100">
+<div class="text-content">
+<span class="small fw-bold d-block mb-2">Top deals</span>
+<p class="small text-muted">180-days lowest price</p>
+</div>
+<img src="assets/images/home/monitor.png" alt="Monitor" class="main-img">
+</div>
+<!-- Deals on Best Sellers -->
+<div class="discover-card deals-best-sellers h-100 d-flex flex-column">
+<span class="small fw-bold d-block mb-2">Deals on best sellers</span>
+<img src="assets/images/home/bagpack2.png" alt="Suitcases" class="main-img img-fluid flex-grow-1">
+<button class="arrow-btn mt-auto"> 
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M10.146 4.146a.5.5 0 0 1 .708 0L14 7.293l-3.146 3.147a.5.5 0 0 1-.708-.708L12.293 8H2.5a.5.5 0 0 1 0-1h9.793L10.146 4.854a.5.5 0 0 1 0-.708z"/> 
+</svg> 
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+
+
+<!-- Inspired By Your Search Section -->
+<section class="inspired-section py-5">
+<div class="container">
+<h2 class="fw-bold mb-4">Inspired By Your Search</h2>
+<!-- Outer wrapper -->
+<div class="slider">
+<!-- Track (duplicated for infinite loop) -->
+<div class="slide-track">
+<ng-container *ngFor="let repeat of [0, 1]"> <!-- duplicate list twice -->
+<div class="product-card" *ngFor="let product of inspiredProducts">
+<div class="img-box">
+<img [src]="product.image" [alt]="product.title" />
+</div>
+<div class="details mt-3">
+<p class="mb-1 product-title">{{ product.title }}</p>
+<p class="price mb-1">
+<span class="text-danger fw-bold">${{ product.discounted }}</span>
+<span class="text-muted text-decoration-line-through ms-2">${{ product.original }}</span>
+</p>
+<!-- Star Rating (FontAwesome) -->
+<div class="rating d-flex align-items-center">
+<ng-container *ngFor="let star of stars; let i = index">
+<i class="fas fa-star text-warning" *ngIf="i < product.rating"></i>
+<i class="far fa-star text-warning" *ngIf="i >= product.rating"></i>
+</ng-container>
+<span class="text-muted small ms-2">({{ product.reviews }})</span>
+</div>
+</div>
+</div>
+</ng-container>
+</div>
+</div>
+</div>
+</section>
+
+
+
+
+<!-- Our Process Section -->
+<section class="process-section py-5">
+<div class="container">
+<h2 class="process-title fw-bold text-center mb-5">
+<span class="dark-text">Our</span>
+<span class="gradient-text"> Process</span>
+</h2>
+<div class="process-container position-relative mx-auto">
+<div class="process-card top-center">
+<img src="assets/images/home/warehouse.png" alt="Supply Chain & Warehousing" />
+<div class="capsule-text">Supply Chain & Warehousing</div>
+</div>
+<div class="process-card right-center">
+<img src="assets/images/home/marketing.png" alt="Graphic Design & Marketing" />
+<div class="capsule-text">Graphic Design & Marketing</div>
+</div>
+<div class="process-card bottom-center">
+<img src="assets/images/home/services.png" alt="Shipping & Logistics" />
+<div class="capsule-text">Shipping & Logistics</div>
+</div>
+<div class="process-card left-center">
+<img src="assets/images/home/production.webp" alt="Product Development & Sourcing" />
+<div class="capsule-text">Product Development & Sourcing</div>
+</div>
+<img src="assets/images/home/top-down.png" alt="Top right curved arrow" class="arrow arrow-top-right">
+<img src="assets/images/home/bottom-down.png" alt="Bottom right curved arrow" class="arrow arrow-bottom-right">
+<img src="assets/images/home/bottom-up.png" alt="Bottom left curved arrow" class="arrow arrow-bottom-left">
+<img src="assets/images/home/top-up.png" alt="Top left curved arrow" class="arrow arrow-top-left">
+</div>
+</div>
+</section>
+
+
+
+
+
+<!-- Feedback Section -->
+<div class="feedback-wrapper">
+<div class="feedback-banner d-flex align-items-stretch">
+<!-- Left image column -->
+<div class="left-image">
+<img src="assets/images/home/banner.jpg" alt="Business people" />
+</div>
+<!-- Right content panel (angled via clip-path) -->
+<div class="right-panel d-flex">
+<div class="panel-inner text-center w-100">
+<h1 class="title">Tell Us What You Think!</h1>
+<p class="lead">
+<span class="nowrap">We want to know how we can make our experience better.</span><br />
+We would love to hear from you. Shoot us an email.
+</p>
+<div class="cta-row">
+<button class="email-btn" (click)="sendEmail()">
+EMAIL US
+</button>
+</div>
+<div class="bottom-contacts d-flex justify-content-center align-items-center">
+<div class="contact-item" (click)="openWebsite()" title="Website">
+<i class="fas fa-globe"></i>
+<span class="contact-text">{{ website }}</span>
+</div>
+<div class="contact-item" title="Email">
+<i class="fas fa-envelope"></i>
+<span class="contact-text">{{ email }}</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+<!-- Trade Section -->
+<div class="secure-trade-section container-fluid">
+<!-- Headline -->
+<div class="row justify-content-center text-center">
+<div class="col-12">
+<h2 class="headline">
+   Secure your trade: quality in production, <br>
+   protection in purchase.
+</h2>
+</div>
+</div>
+<!-- Shaded Container -->
+<div class="content-box row mt-4 mx-auto">
+<!-- Left Column: Image -->
+<div class="col-md-6 d-flex justify-content-center align-items-center position-relative">
+<img src="assets/images/home/trade.png" alt="Trade Graphic" class="trade-image">
+</div>
+<!-- Right Column: Info Cards -->
+<div class="col-md-6 info-cards">
+<!-- Card 1 -->
+<div class="card-box position-relative">
+<h5 class="card-title">Verified Supplier</h5>
+<p class="card-text">
+  Work with a wide network of suppliers backed by third-party verification.
+  Spot the ‘Verified’ badge to start sourcing from proven partners
+  your business can trust.
+</p>
+<div class="btn-wrapper text-center">
+<button class="btn-view">view more</button>
+</div>
+<!-- Icon Half Outside -->
+<div class="icon-box">
+<img src="assets/images/home/verify.png" alt="Verified Icon">
+</div>
+</div>
+<!-- Card 2 -->
+<div class="card-box position-relative mt-4">
+<h5 class="card-title">Trade Assurance</h5>
+<p class="card-text">
+    Your purchase is protected at every step: secure payments, issue coverage
+    for products and shipping, plus mediation support — only on
+    southernsourcingsupply.com.
+</p>
+<div class="btn-wrapper text-center">
+<button class="btn-view">view more</button>
+</div>
+<!-- Icon Half Outside -->
+<div class="icon-box">
+<img src="assets/images/home/trade-assurance.png" alt="Trade Assurance Icon">
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<!-- Testimonial Section -->
+<section class="testimonial-section">
+<div class="container-fluid px-0">
+<!-- Heading -->
+<h2 class="section-title">
+<span class="line-one">Trusted by Our Clients or Partner</span>
+<span class="line-two">Feedback.</span>
+</h2>
+<!-- Testimonials Carousel Container -->
+<div class="testimonials-carousel-container d-flex flex-row overflow-auto gap-3 py-3">
+<div class="testimonial-card card flex-shrink-0 p-4"
+  *ngFor="let testimonial of testimonials; trackBy: trackByAuthor"
+>
+<div class="quote-content">
+<span class="quote-icon">“</span>
+<p class="quote-text">{{ testimonial.quote }}</p>
+</div>
+<div class="author-name text-end mt-3">
+<span>{{ testimonial.author }}</span>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+<!-- Sign up Section -->
+<section class="signup-section">
+<div class="promo-banner container d-flex align-items-center justify-content-center">
+<div class="content text-center text-white">
+<h2 class="headline mb-3">Ready to get started?</h2>
+<p class="subtext mb-4">
+  Explore millions of products from trusted suppliers by signing up today!
+</p>
+<button class="btn btn-success cta-button" (click)="onSignUp()">Sign up</button>
+</div>
+</div>
+

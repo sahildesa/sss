@@ -1,0 +1,69 @@
+<div class="navbar-wrapper sticky-navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center p-0">
+      <a class="navbar d-flex align-items-center navbar-brand-custom">
+        <img src="assets/images/SSS-removebg-preview.png" alt="Logo" width="50" height="50" class="mx-2">
+        Southern Sourcing Supply
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Close button only in mobile -->
+        <!-- <div class="d-flex justify-content-end p-2 d-lg-none">
+          <button 
+            type="button" 
+            class="btn-close" 
+            aria-label="Close" 
+            (click)="collapseNavbar()">
+          </button>
+        </div> -->
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item" *ngFor="let link of navLinks">
+            <a
+              class="nav-link mx-2 text-decoration-none nav-underline"
+              [ngClass]="{
+                'coinzee-tab': link.label === 'Coinzee',
+                'active': isActive(link.path)
+              }"
+              [routerLink]="link.path"
+              routerLinkActive="active-link"
+              (click)="collapseNavbar()"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Content Wrapper -->
+<div class="">
+  <!-- Main Content Area -->
+    <div class="content-wrapper">
+      <div
+        [class.pushed]="isNavbarExpanded"
+        [class.push-down]="isNavbarExpanded"
+      >
+        <router-outlet></router-outlet>
+      </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<app-footer class="footer" *ngIf="shouldShowFooter()"></app-footer>

@@ -1,0 +1,110 @@
+<div class="container-fluid py-5">
+    <div class="row gx-4">
+      
+      <!-- Thumbnail Column -->
+      <div class="col-md-1 d-none d-md-flex flex-column align-items-center gap-2">
+        <img *ngFor="let img of product.images"
+             [src]="img"
+             class="border rounded shadow-sm"
+             [class.border-primary]="img === product.mainImage"
+             style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;"
+             (click)="product.mainImage = img" />
+      </div>
+  
+      <!-- Main Image + Buttons + Color Options -->
+      <div class="col-md-5 text-center">
+        <div class="bg-white p-3 rounded shadow-sm">
+          <img [src]="product.mainImage" class="img-fluid" style="max-height: 300px;" />
+        </div>
+  
+        <div class="d-flex gap-2 justify-content-center mt-3">
+          <button class="btn btn-dark px-4">Buy</button>
+          <button class="btn btn-outline-dark px-4">+ Add to cart</button>
+        </div>
+  
+        <div class="mt-4 text-start">
+          <strong>Color</strong>
+          <div class="d-flex gap-2 mt-2">
+            <div *ngFor="let color of product.colors"
+                 class="rounded border"
+                 [ngStyle]="{backgroundColor: color}"
+                 style="width: 30px; height: 30px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Product Details -->
+      <div class="col-md-6 mt-4 mt-md-0">
+        <h5 class="fw-bold">{{ product.title }} - ({{ product.ssds[0] }}/Mac OS Big Sur)</h5>
+        <p>
+          <span class="badge bg-success">{{ product.rating }}</span>
+          <span class="text-muted ms-2">{{ product.reviews }} Ratings & {{ product.totalReviews }} Reviews</span>
+        </p>
+  
+        <h6 class="text-success fw-bold">Special Price <span class="text-danger ms-3">Hurry up only {{ product.stockLeft }} left</span></h6>
+        <h3 class="fw-bold">${{ product.price }}</h3>
+  
+        <ul class="list-unstyled text-muted small mt-2">
+          <li>+ $99 Protect Promise Fee <a href="#">Learn more</a></li>
+          <li>Secure delivery by <strong>{{ product.deliveryDate }}</strong></li>
+        </ul>
+  
+        <!-- Offers Section -->
+        <div class="my-3">
+          <p class="fw-bold mb-1">Available Offers</p>
+          <ul class="list-unstyled small">
+            <li *ngFor="let offer of product.offers">✔️ {{ offer }}</li>
+          </ul>
+          <a href="#">View 15 More Offers</a>
+        </div>
+  
+        <!-- Exchange Options (Radio Buttons as Buttons) -->
+  <div class="my-4">
+    <div class="btn-group w-100" role="group">
+      <input type="radio" class="btn-check" name="exchangeOption" id="withoutExchange" autocomplete="off" checked>
+      <label class="btn btn-outline-secondary d-flex justify-content-between" for="withoutExchange">
+        <span>Buy Without Exchange</span>
+        <span class="fw-bold">${{ product.price }}</span>
+      </label>
+  
+      <input type="radio" class="btn-check" name="exchangeOption" id="withExchange" autocomplete="off">
+      <label class="btn btn-outline-secondary d-flex justify-content-between" for="withExchange">
+        <span>Buy With Exchange</span>
+        <span class="fw-bold">up to ${{ product.exchangeAmount }} off</span>
+      </label>
+    </div>
+  </div>
+  
+  
+        <!-- SSD Options -->
+        <div>
+          <p class="fw-bold mb-2">SSD Capacity</p>
+          <div class="btn-group btn-group-sm">
+            <button *ngFor="let ssd of product.ssds" class="btn btn-outline-dark">{{ ssd }}</button>
+          </div>
+        </div>
+  
+        <!-- Highlights -->
+        <div class="mt-4">
+          <p class="fw-bold mb-2">Highlights</p>
+          <ul class="text-muted small mb-0">
+            <li *ngFor="let point of product.highlights">• {{ point }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Delivery and Return Info -->
+    <div class="row mt-4">
+      <div class="col-md-6 d-flex align-items-center gap-3 text-muted small">
+        <i class="bi bi-truck"></i>
+        <span>Delivery <strong class="text-success">5 working days</strong></span>
+      </div>
+      <div class="col-md-6 text-muted small">
+        Product returns and exchanges Terms <strong>15 days</strong> —
+        <a href="#">Conditions</a>
+      </div>
+    </div>
+  </div>
+  

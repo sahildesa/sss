@@ -1,0 +1,84 @@
+.inventory-widget {
+    background-color: #fdf7ef;
+  
+    .search-box input {
+      max-width: 400px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+    }
+  
+    .overall-inventory {
+      background-color: #fbf7f2;
+      border-radius: 12px;
+      font-family: 'Segoe UI', sans-serif;
+  
+      .row > div {
+        padding: 1rem;
+  
+        .text-primary {
+          color: #1a4cd0 !important;
+        }
+  
+        .text-warning {
+          color: #f79b1e !important;
+        }
+  
+        .text-purple {
+          color: #7e4bd1 !important;
+        }
+  
+        .text-danger {
+          color: #e63946 !important;
+        }
+  
+        .h5, .h6 {
+          margin: 0.3rem 0;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+
+  .product-container {
+    background-color: #fefcf8;
+    border-radius: 1rem;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  
+    h4 {
+      font-family: 'Georgia', serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+  
+    table {
+      th {
+        font-weight: 600;
+        color: #6c757d;
+      }
+  
+      td {
+        font-weight: 500;
+        vertical-align: middle;
+      }
+    }
+  
+    .btn {
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      padding: 0.4rem 1rem;
+    }
+  
+    .text-success {
+      color: #28a745 !important;
+    }
+  
+    .text-danger {
+      color: #dc3545 !important;
+    }
+  
+    .text-warning {
+      color: #fd7e14 !important;
+    }
+  }
+  

@@ -13,6 +13,12 @@ import { AuthComponent } from './pages/auth/auth.component';
 // Admin Components
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 
+// Dashboard (post-login layout with sidebar)
+import { DashboardLayoutComponent } from './pages/dashboard-layout/dashboard-layout.component';
+import { DashboardUsersComponent } from './pages/dashboard-layout/dashboard-users/dashboard-users.component';
+import { DashboardProductsComponent } from './pages/dashboard-layout/dashboard-products/dashboard-products.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+
 // Auth Guards
 import { AuthGuard, SuperAdminGuard } from '../services/auth/auth.guard';
 import { LoginComponent } from './login/login.component';
@@ -28,6 +34,19 @@ const routes: Routes = [
   { path: 'privacy', component: PrivacyComponent },
   { path: 'auth', component: AuthComponent },
   { path: 'login', component: LoginComponent },
+
+  /* Dashboard (sidebar: Analytics, Users, Products) - for Vendor/Distributor after login */
+  {
+    path: 'dashboard',
+    component: DashboardLayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'analytics', component: DashboardComponent },
+      { path: 'users', component: DashboardUsersComponent },
+      { path: 'products', component: DashboardProductsComponent },
+      { path: '', redirectTo: 'analytics', pathMatch: 'full' }
+    ]
+  },
 
   /* Dynamic Category Page */
   { path: 'category/:name', component: CategoryPageComponent },

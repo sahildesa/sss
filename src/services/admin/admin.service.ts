@@ -162,6 +162,44 @@ export class AdminService {
     );
   }
 
+  /** Get users list as { count, users }. All API user keys are patched to the table. */
+  getUsersList(payload: ListUsersPayload = {}): Observable<VendorListResponse> {
+    const url = `${this.apiUrl}auth/listUsers/`;
+    return this.http.post<VendorListResponse>(url, payload).pipe(
+      map(response => {
+        if (!response) return { count: 0, users: [] };
+        const rawUsers = response.users || [];
+        const users: User[] = rawUsers.map(u => this.normalizeListUser(u));
+        return { count: response.count ?? users.length, users };
+      }),
+      catchError(error => {
+        console.error('Error in getUsersList:', error);
+        return this.handleError(error);
+      })
+    );
+  }
+
+  /** Normalize listUsers item so all keys are present for table; preserves every API key. */
+  private normalizeListUser(u: any): User {
+    return {
+      ...u,
+      entityKey: u.entityKey ?? '',
+      email: u.email ?? '',
+      roles: Array.isArray(u.roles) ? u.roles : [],
+      phone: u.phone ?? null,
+      firstName: u.firstName ?? '',
+      lastName: u.lastName ?? '',
+      companyName: u.companyName ?? null,
+      about: u.about ?? null,
+      address: u.address ?? null,
+      isActive: !!u.isActive,
+      isVerified: !!u.isVerified,
+      isDeclined: !!u.isDeclined,
+      approvedRoles: Array.isArray(u.approvedRoles) ? u.approvedRoles : [],
+      pendingRoles: Array.isArray(u.pendingRoles) ? u.pendingRoles : []
+    };
+  }
+
   // Get users with custom filter
   getUsersWithFilter(filter: ListUsersPayload): Observable<User[]> {
     const url = `${this.apiUrl}auth/listUsers/`;
@@ -237,8 +275,8 @@ export class AdminService {
 
   // Activate user - FIXED: Use updateUser endpoint with isActive: true
   activateUser(payload: ActivateUserPayload): Observable<ApiResponse> {
-    // Use the updateUser endpoint with isActive: true
-    const url = `${this.apiUrl}auth/updateUser/${payload.entityKey}/`;
+    // Use the updateUser endpoint with isActive: true (auth/{entityKey}/updateUser/)
+    const url = `${this.apiUrl}auth/${payload.entityKey}/updateUser/`;
     
     // Update payload to set isActive: true
     const activatePayload = {
@@ -286,9 +324,9 @@ export class AdminService {
     );
   }
 
-  // Update user
+  // Update user (auth/{entityKey}/updateUser/)
   updateUser(entityKey: string, updates: any): Observable<ApiResponse> {
-    const url = `${this.apiUrl}auth/updateUser/${entityKey}/`;
+    const url = `${this.apiUrl}auth/${entityKey}/updateUser/`;
     
     console.log('Update User URL:', url);
     console.log('Update User Data:', updates);
@@ -687,7 +725,7 @@ export class AdminService {
     
     const testPatterns = [
       { 
-        url: `${this.apiUrl}auth/updateUser/${entityKey}/`, 
+        url: `${this.apiUrl}auth/${entityKey}/updateUser/`, 
         method: 'PATCH', 
         payload: { isActive: true, role: 'Vendor' },
         description: 'PATCH to updateUser with isActive: true' 

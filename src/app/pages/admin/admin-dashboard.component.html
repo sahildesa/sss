@@ -1,31 +1,73 @@
 <!-- admin-dashboard.component.html -->
-<div class="admin-dashboard">
-  <!-- Header -->
-  <div class="dashboard-header bg-dark text-white p-3 shadow">
-    <div class="container-fluid">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h3 class="mb-0">
-            <i class="fas fa-crown me-2"></i>Super Admin Dashboard
-          </h3>
-          <small class="text-muted">Manage Vendor Approvals & System</small>
-        </div>
-        <div>
-          <button class="btn btn-outline-light btn-sm me-2" (click)="loadAllVendors()">
-            <i class="fas fa-sync-alt"></i> Refresh
-          </button>
-          <button class="btn btn-danger btn-sm" (click)="logout()">
-            <i class="fas fa-sign-out-alt"></i> Logout
-          </button>
+<div class="admin-dashboard d-flex">
+  <!-- Mobile sidebar overlay -->
+  <div class="admin-sidebar-overlay" *ngIf="sidebarOpen" (click)="sidebarOpen = false" role="button" tabindex="0" aria-label="Close menu"></div>
+
+  <!-- Left Sidebar: Users / Products (collapsible on mobile) -->
+  <aside class="admin-sidebar" [class.sidebar-open]="sidebarOpen">
+    <div class="sidebar-brand p-3 border-bottom">
+      <h5 class="mb-0 text-dark">Admin Dashboard</h5>
+      <small class="text-muted">Manage system</small>
+    </div>
+    <nav class="sidebar-nav flex-grow-1 py-2">
+      <button type="button" class="sidebar-link w-100 text-start"
+              [class.active]="adminSection === 'users'"
+              (click)="adminSection = 'users'">
+        <i class="fas fa-users me-2"></i> Users
+      </button>
+      <button type="button" class="sidebar-link w-100 text-start"
+              [class.active]="adminSection === 'products'"
+              (click)="adminSection = 'products'; loadProducts()">
+        <i class="fas fa-box me-2"></i> Products
+      </button>
+    </nav>
+    <div class="sidebar-footer p-2 border-top">
+      <button type="button" class="btn btn-outline-danger btn-sm w-100" (click)="logout()">
+        <i class="fas fa-sign-out-alt me-1"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="admin-main flex-grow-1 d-flex flex-column overflow-auto">
+    <!-- Header: section title + mobile menu + refresh + logged-in user -->
+    <div class="dashboard-header bg-dark text-white p-3 shadow">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-outline-light btn-sm d-lg-none me-2" (click)="toggleSidebar()" aria-label="Menu">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div>
+              <h3 class="mb-0">{{ adminSection === 'users' ? 'Users' : 'Products' }}</h3>
+              <small class="text-white opacity-90">
+                {{ adminSection === 'users' ? 'All user-related info (Vendor, Distributor, SuperAdmin)' : 'All products-related info' }}
+              </small>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2 flex-shrink-0">
+            <!-- <button *ngIf="adminSection === 'users'" class="btn btn-outline-light btn-sm" (click)="loadAllVendors()">
+              <i class="fas fa-sync-alt"></i> <span class="d-none d-sm-inline">Refresh</span>
+            </button> -->
+            <!-- Logged-in session: initials + info -->
+            <!-- <div *ngIf="authService.getCurrentUser()" class="d-flex align-items-center gap-2 px-2 py-1 rounded bg-dark bg-opacity-25" title="Session active">
+              <span class="user-initials rounded-circle d-inline-flex align-items-center justify-content-center text-white bg-primary border border-light"
+                    style="width: 32px; height: 32px; font-size: 0.75rem; font-weight: 600;">
+                {{ getInitials(authService.getCurrentUser()) }}
+              </span>
+              <span class="d-none d-md-inline small text-white opacity-90" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                {{ getCurrentUserLabel() }}
+              </span>
+            </div> -->
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Stats Cards -->
-  <div class="container-fluid py-4">
-    <div class="row g-3 mb-4">
-      <div class="col-md-3">
+    <!-- USERS SECTION -->
+    <div *ngIf="adminSection === 'users'" class="container-fluid py-4 flex-grow-1">
+      <div class="row g-3 mb-4">
+      <div class="col-12 col-sm-6 col-lg-3">
         <div class="card border-warning shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -46,8 +88,7 @@
           </div>
         </div>
       </div>
-      
-      <div class="col-md-3">
+      <div class="col-12 col-sm-6 col-lg-3">
         <div class="card border-primary shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -68,8 +109,7 @@
           </div>
         </div>
       </div>
-      
-      <div class="col-md-3">
+      <div class="col-12 col-sm-6 col-lg-3">
         <div class="card border-success shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -90,8 +130,7 @@
           </div>
         </div>
       </div>
-      
-      <div class="col-md-3">
+      <div class="col-12 col-sm-6 col-lg-3">
         <div class="card border-danger shadow-sm">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
@@ -155,20 +194,17 @@
 
       <!-- Tab Content -->
       <div class="card-body">
-        <!-- Search and Filter -->
-        <div class="row mb-4">
-          <div class="col-md-8">
+        <!-- Search (all fields) and Filter -->
+        <div class="row mb-4 g-2">
+          <div class="col-12 col-md-8">
             <div class="input-group">
-              <span class="input-group-text">
-                <i class="fas fa-search"></i>
-              </span>
-              <input type="text" 
-                     class="form-control" 
-                     placeholder="Search by name, email, or company..."
+              <span class="input-group-text"><i class="fas fa-search"></i></span>
+              <input type="text" autocomplete="off" class="form-control"
+                     placeholder="Search all fields (email, name, company, phone, roles, about, address...)"
                      [(ngModel)]="searchTerm">
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-12 col-md-4">
             <div class="d-flex gap-2">
               <button *ngIf="selectedTab === 'pending'" 
                       class="btn btn-success"
@@ -187,67 +223,122 @@
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <p class="mt-2">Loading vendors...</p>
+          <p class="mt-2">Loading users...</p>
         </div>
 
-        <!-- PENDING VENDORS TABLE -->
-        <div *ngIf="!isLoading && selectedTab === 'pending'">
-          <div *ngIf="pendingVendors.length === 0" class="text-center py-5">
-            <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
-            <h5>No pending vendors</h5>
-            <p class="text-muted">All vendors have been processed</p>
+        <!-- Single table: all users (Vendor, Distributor, SuperAdmin), all keys as columns -->
+        <div *ngIf="!isLoading">
+          <div *ngIf="getTabUsers().length === 0" class="text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h5>No users in this category</h5>
+            <p class="text-muted">Total {{ totalCount }} users (Vendor, Distributor, SuperAdmin)</p>
           </div>
 
-          <div *ngIf="pendingVendors.length > 0" class="table-responsive">
-            <table class="table table-hover">
+          <div *ngIf="getTabUsers().length > 0" class="table-responsive overflow-auto">
+            <table class="table table-hover table-sm users-table">
               <thead class="table-light">
                 <tr>
-                  <th width="50">
-                    <input type="checkbox" (change)="toggleSelectAll($event)">
+                  <th *ngIf="selectedTab === 'pending'" width="40" class="no-sort">
+                    <input type="checkbox" autocomplete="off" (change)="toggleSelectAll($event)">
                   </th>
-                  <th>Vendor Details</th>
-                  <th>Company</th>
-                  <th>Phone</th>
-                  <th>Registered On</th>
-                  <th>Actions</th>
+                  <th class="sortable" (click)="setSort('email')" title="Sort by Email">
+                    Email <i class="fas sort-icon" [ngClass]="sortColumn === 'email' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('firstName')" title="Sort by First Name">
+                    First Name <i class="fas sort-icon" [ngClass]="sortColumn === 'firstName' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('lastName')" title="Sort by Last Name">
+                    Last Name <i class="fas sort-icon" [ngClass]="sortColumn === 'lastName' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('companyName')" title="Sort by Company">
+                    Company <i class="fas sort-icon" [ngClass]="sortColumn === 'companyName' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('phone')" title="Sort by Phone">
+                    Phone <i class="fas sort-icon" [ngClass]="sortColumn === 'phone' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('roles')" title="Sort by Roles">
+                    Roles <i class="fas sort-icon" [ngClass]="sortColumn === 'roles' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th *ngIf="selectedTab === 'approved' || selectedTab === 'active' || selectedTab === 'declined'" class="sortable" (click)="setSort('approvedRoles')" title="Sort by Approved Roles">
+                    Approved Roles <i class="fas sort-icon" [ngClass]="sortColumn === 'approvedRoles' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th *ngIf="selectedTab === 'pending'" class="sortable" (click)="setSort('pendingRoles')" title="Sort by Pending Roles">
+                    Pending Roles <i class="fas sort-icon" [ngClass]="sortColumn === 'pendingRoles' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('about')" title="Sort by About">
+                    About <i class="fas sort-icon" [ngClass]="sortColumn === 'about' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('address')" title="Sort by Address">
+                    Address <i class="fas sort-icon" [ngClass]="sortColumn === 'address' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('isActive')" title="Sort by Active">
+                    Active <i class="fas sort-icon" [ngClass]="sortColumn === 'isActive' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('isVerified')" title="Sort by Verified">
+                    Verified <i class="fas sort-icon" [ngClass]="sortColumn === 'isVerified' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="sortable" (click)="setSort('isDeclined')" title="Sort by Declined">
+                    Declined <i class="fas sort-icon" [ngClass]="sortColumn === 'isDeclined' ? (sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'"></i>
+                  </th>
+                  <th class="no-sort">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let vendor of pendingVendors">
+                <tr *ngFor="let user of getTabUsers()">
+                  <td *ngIf="selectedTab === 'pending'">
+                    <input type="checkbox" autocomplete="off"
+                           [(ngModel)]="user.selected"
+                           (change)="onSelectVendor(user)">
+                  </td>
+                  <!-- <td class="text-break">{{ user.entityKey || '–' }}</td> -->
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.firstName || '–' }}</td>
+                  <td>{{ user.lastName || '–' }}</td>
+                  <td>{{ user.companyName || '–' }}</td>
+                  <td>{{ user.phone || '–' }}</td>
+                  <td class="small">{{ formatRoles(user.roles) }}</td>
+                  <td *ngIf="selectedTab === 'approved' || selectedTab === 'active' || selectedTab === 'declined'" class="small">{{ formatArray(user.approvedRoles) }}</td>
+                  <td *ngIf="selectedTab === 'pending'" class="small">{{ formatArray(user.pendingRoles) }}</td>
+                  <td class="small text-break" style="max-width:180px">{{ user.about || '–' }}</td>
+                  <td class="small text-break" style="max-width:180px">{{ user.address || '–' }}</td>
                   <td>
-                    <input type="checkbox" 
-                           [(ngModel)]="vendor.selected"
-                           (change)="onSelectVendor(vendor)">
+                    <span [class.badge]="true" [class.bg-success]="user.isActive" [class.bg-secondary]="!user.isActive">
+                      {{ user.isActive ? 'Yes' : 'No' }}
+                    </span>
                   </td>
                   <td>
-                    <strong>{{ vendor.firstName }} {{ vendor.lastName }}</strong>
-                    <div class="text-muted small">{{ vendor.email }}</div>
+                    <span [class.badge]="true" [class.bg-success]="user.isVerified" [class.bg-secondary]="!user.isVerified">
+                      {{ user.isVerified ? 'Yes' : 'No' }}
+                    </span>
                   </td>
                   <td>
-                    {{ vendor.companyName || 'N/A' }}
-                  </td>
-                  <td>
-                    {{ vendor.phone || 'N/A' }}
-                  </td>
-                  <td>
-                    {{ vendor.createdAt | date:'medium' }}
+                    <span [class.badge]="true" [class.bg-danger]="user.isDeclined" [class.bg-secondary]="!user.isDeclined">
+                      {{ user.isDeclined ? 'Yes' : 'No' }}
+                    </span>
                   </td>
                   <td>
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-primary" 
-                              (click)="viewVendorDetails(vendor)"
-                              title="View Details">
+                      <button class="btn btn-outline-primary btn-sm" (click)="viewVendorDetails(user)" title="View">
                         <i class="fas fa-eye"></i>
                       </button>
-                      <button class="btn btn-success" 
-                              (click)="approveVendor(vendor)"
-                              title="Approve">
+                      <button *ngIf="!isSuperAdmin(user)" class="btn btn-outline-secondary btn-sm" (click)="openUpdateModal(user)" title="Update user">
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <button *ngIf="user.vendorStatus === 'pending'" class="btn btn-success btn-sm"
+                              (click)="approveVendor(user)" title="Approve">
                         <i class="fas fa-check"></i>
                       </button>
-                      <button class="btn btn-danger" 
-                              (click)="rejectVendor(vendor)"
-                              title="Reject">
+                      <button *ngIf="user.vendorStatus === 'pending'" class="btn btn-danger btn-sm"
+                              (click)="rejectVendor(user)" title="Reject">
                         <i class="fas fa-times"></i>
+                      </button>
+                      <button *ngIf="user.vendorStatus === 'approved'" class="btn btn-success btn-sm"
+                              (click)="activateVendor(user)" title="Activate">
+                        <i class="fas fa-power-off"></i>
+                      </button>
+                      <button *ngIf="user.vendorStatus === 'declined'" class="btn btn-danger btn-sm"
+                              (click)="deleteVendor(user)" title="Delete">
+                        <i class="fas fa-trash"></i>
                       </button>
                     </div>
                   </td>
@@ -256,111 +347,117 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+    </div>
+    <!-- / USERS SECTION -->
 
-        <!-- APPROVED VENDORS TABLE -->
-        <div *ngIf="!isLoading && selectedTab === 'approved'">
-          <div *ngIf="approvedVendors.length === 0" class="text-center py-5">
-            <i class="fas fa-users fa-3x text-muted mb-3"></i>
-            <h5>No approved vendors pending activation</h5>
-          </div>
-
-          <div *ngIf="approvedVendors.length > 0" class="table-responsive">
-            <table class="table table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th>Vendor Details</th>
-                  <th>Approved On</th>
-                  <th>Approved By</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let vendor of approvedVendors">
-                  <td>
-                    <strong>{{ vendor.firstName }} {{ vendor.lastName }}</strong>
-                    <div class="text-muted small">{{ vendor.email }}</div>
-                  </td>
-                  <td>
-                    {{ vendor.approvedAt | date:'medium' }}
-                  </td>
-                  <td>
-                    {{ vendor.approvedBy || 'System' }}
-                  </td>
-                  <td>
-                    <span class="badge bg-warning">Awaiting Activation</span>
-                  </td>
-                  <td>
-                    <button class="btn btn-success btn-sm" 
-                            (click)="activateVendor(vendor)">
-                      <i class="fas fa-power-off me-1"></i> Activate
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+    <!-- PRODUCTS SECTION -->
+    <div *ngIf="adminSection === 'products'" class="container-fluid py-4 flex-grow-1">
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-primary shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Total Products</h6>
+                  <h3 class="mb-0">{{ productCount }}</h3>
+                </div>
+                <div class="bg-primary p-3 rounded-circle">
+                  <i class="fas fa-box fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <!-- ACTIVE VENDORS TABLE -->
-        <div *ngIf="!isLoading && selectedTab === 'active'">
-          <div class="table-responsive">
-            <table class="table table-hover">
-              <thead class="table-light">
-                <tr>
-                  <th>Vendor Details</th>
-                  <th>Company</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let vendor of activeVendors">
-                  <td>
-                    <strong>{{ vendor.firstName }} {{ vendor.lastName }}</strong>
-                    <div class="text-muted small">{{ vendor.email }}</div>
-                  </td>
-                  <td>{{ vendor.companyName }}</td>
-                  <td>
-                    <span class="badge bg-success">Active</span>
-                  </td>
-                  <td>
-                    <button class="btn btn-outline-primary btn-sm" 
-                            (click)="viewVendorDetails(vendor)">
-                      <i class="fas fa-eye"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-success shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">In Stock</h6>
+                  <h3 class="mb-0">{{ inStockCount }}</h3>
+                </div>
+                <div class="bg-success p-3 rounded-circle">
+                  <i class="fas fa-check-circle fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-warning shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Low Stock</h6>
+                  <h3 class="mb-0">{{ lowStockCount }}</h3>
+                </div>
+                <div class="bg-warning p-3 rounded-circle">
+                  <i class="fas fa-exclamation-triangle fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-danger shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Out of Stock</h6>
+                  <h3 class="mb-0">{{ outOfStockCount }}</h3>
+                </div>
+                <div class="bg-danger p-3 rounded-circle">
+                  <i class="fas fa-times-circle fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- DECLINED VENDORS TABLE -->
-        <div *ngIf="!isLoading && selectedTab === 'declined'">
-          <div class="table-responsive">
-            <table class="table table-hover">
+      <div class="card shadow">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <h6 class="mb-0">All Products</h6>
+          <!-- <button class="btn btn-outline-primary btn-sm" (click)="loadProducts()" [disabled]="productsLoading">
+            <i class="fas fa-sync-alt me-1"></i> Refresh
+          </button> -->
+        </div>
+        <div class="card-body">
+          <div *ngIf="productsLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Loading products...</p>
+          </div>
+          <div *ngIf="!productsLoading && products.length === 0" class="text-center py-5 text-muted">
+            <i class="fas fa-box-open fa-3x mb-3"></i>
+            <p>No products yet. Connect your products API to show data here.</p>
+          </div>
+          <div *ngIf="!productsLoading && products.length > 0" class="table-responsive">
+            <table class="table table-hover table-sm">
               <thead class="table-light">
                 <tr>
-                  <th>Vendor Details</th>
-                  <th>Declined On</th>
-                  <th>Reason</th>
-                  <th>Actions</th>
+                  <th>Name</th>
+                  <th>Buying Price</th>
+                  <th>Quantity</th>
+                  <th>Threshold</th>
+                  <th>Expiry</th>
+                  <th>Availability</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let vendor of declinedVendors">
+                <tr *ngFor="let p of products">
+                  <td>{{ p.name }}</td>
+                  <td>{{ p.buyingPrice | currency }}</td>
+                  <td>{{ p.quantity }}</td>
+                  <td>{{ p.threshold }}</td>
+                  <td>{{ p.expiry }}</td>
                   <td>
-                    <strong>{{ vendor.firstName }} {{ vendor.lastName }}</strong>
-                    <div class="text-muted small">{{ vendor.email }}</div>
-                  </td>
-                  <td>{{ vendor.declinedAt | date:'medium' }}</td>
-                  <td>{{ vendor.rejectionReason || 'No reason provided' }}</td>
-                  <td>
-                    <button class="btn btn-danger btn-sm" 
-                            (click)="deleteVendor(vendor)">
-                      <i class="fas fa-trash"></i> Delete
-                    </button>
+                    <span class="badge" [ngClass]="{
+                      'bg-success': p.availability === 'In stock',
+                      'bg-warning': p.availability === 'Low stock',
+                      'bg-danger': p.availability === 'Out of stock'
+                    }">{{ p.availability }}</span>
                   </td>
                 </tr>
               </tbody>
@@ -369,14 +466,15 @@
         </div>
       </div>
     </div>
-  </div>
+    <!-- / PRODUCTS SECTION -->
+  </main>
 
-  <!-- Vendor Details Modal/Sidebar -->
+  <!-- User Details Modal/Sidebar (Vendor, Distributor, SuperAdmin) -->
   <div *ngIf="selectedVendor" class="vendor-details-sidebar">
     <div class="sidebar-overlay" (click)="closeDetails()"></div>
     <div class="sidebar-content">
       <div class="sidebar-header">
-        <h5>Vendor Details</h5>
+        <h5>User Details</h5>
         <button class="btn-close" (click)="closeDetails()"></button>
       </div>
       
@@ -385,14 +483,18 @@
           <div class="vendor-avatar bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" 
                style="width: 80px; height: 80px;">
             <span class="fs-3 text-white">
-              {{ selectedVendor.firstName.charAt(0) }}{{ selectedVendor.lastName.charAt(0) }}
+              {{ (selectedVendor.firstName || ' ').charAt(0) }}{{ (selectedVendor.lastName || ' ').charAt(0) }}
             </span>
           </div>
-          <h5 class="mt-3">{{ selectedVendor.firstName }} {{ selectedVendor.lastName }}</h5>
+          <h5 class="mt-3">{{ selectedVendor.firstName || '–' }} {{ selectedVendor.lastName || '–' }}</h5>
           <p class="text-muted">{{ selectedVendor.email }}</p>
         </div>
 
         <div class="details-list">
+          <!-- <div class="detail-item">
+            <span class="label">Entity Key:</span>
+            <span class="value small text-break">{{ selectedVendor.entityKey || '–' }}</span>
+          </div> -->
           <div class="detail-item">
             <span class="label">Company:</span>
             <span class="value">{{ selectedVendor.companyName || 'N/A' }}</span>
@@ -402,8 +504,36 @@
             <span class="value">{{ selectedVendor.phone || 'N/A' }}</span>
           </div>
           <div class="detail-item">
-            <span class="label">Role:</span>
-            <span class="badge bg-primary">{{ selectedVendor.role || 'Vendor' }}</span>
+            <span class="label">Roles:</span>
+            <span class="value">{{ formatRoles(selectedVendor.roles) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Approved Roles:</span>
+            <span class="value">{{ formatArray(selectedVendor.approvedRoles) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Pending Roles:</span>
+            <span class="value">{{ formatArray(selectedVendor.pendingRoles) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">About:</span>
+            <span class="value">{{ selectedVendor.about || '–' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Address:</span>
+            <span class="value">{{ selectedVendor.address || '–' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Active:</span>
+            <span class="value">{{ selectedVendor.isActive ? 'Yes' : 'No' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Verified:</span>
+            <span class="value">{{ selectedVendor.isVerified ? 'Yes' : 'No' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Declined:</span>
+            <span class="value">{{ selectedVendor.isDeclined ? 'Yes' : 'No' }}</span>
           </div>
           <div class="detail-item">
             <span class="label">Status:</span>
@@ -414,7 +544,7 @@
           </div>
           <div class="detail-item">
             <span class="label">Registered:</span>
-            <span class="value">{{ selectedVendor.createdAt | date:'medium' }}</span>
+            <span class="value">{{ selectedVendor.createdAt ? (selectedVendor.createdAt | date:'medium') : '–' }}</span>
           </div>
           <div *ngIf="selectedVendor.approvedAt" class="detail-item">
             <span class="label">Approved:</span>
@@ -430,30 +560,94 @@
           </div>
         </div>
 
-        <!-- Action Buttons based on status -->
+        <!-- Action Buttons based on status (dynamic label: Vendor, Distributor, SuperAdmin, etc.) -->
         <div class="mt-4">
+          <div *ngIf="!isSuperAdmin(selectedVendor)" class="d-grid gap-2 mb-2">
+            <button class="btn btn-outline-primary" (click)="openUpdateModal(selectedVendor)" title="Update user info">
+              <i class="fas fa-pen me-1"></i> Update user info
+            </button>
+          </div>
           <div *ngIf="selectedVendor.vendorStatus === 'pending'" class="d-grid gap-2">
             <button class="btn btn-success" (click)="approveVendor(selectedVendor)">
-              <i class="fas fa-check me-1"></i> Approve Vendor
+              <i class="fas fa-check me-1"></i> Approve {{ getRoleLabel(selectedVendor) }}
             </button>
             <button class="btn btn-danger" (click)="rejectVendor(selectedVendor)">
-              <i class="fas fa-times me-1"></i> Reject Vendor
+              <i class="fas fa-times me-1"></i> Reject {{ getRoleLabel(selectedVendor) }}
             </button>
           </div>
 
           <div *ngIf="selectedVendor.vendorStatus === 'approved'" class="d-grid">
             <button class="btn btn-success" (click)="activateVendor(selectedVendor)">
-              <i class="fas fa-power-off me-1"></i> Activate Vendor
+              <i class="fas fa-power-off me-1"></i> Activate {{ getRoleLabel(selectedVendor) }}
             </button>
           </div>
 
           <div *ngIf="selectedVendor.vendorStatus === 'declined'" class="d-grid">
             <button class="btn btn-danger" (click)="deleteVendor(selectedVendor)">
-              <i class="fas fa-trash me-1"></i> Delete Permanently
+              <i class="fas fa-trash me-1"></i> Delete {{ getRoleLabel(selectedVendor) }} Permanently
             </button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Update User Modal -->
+  <div class="modal fade" [class.show]="userToUpdate" [style.display]="userToUpdate ? 'block' : 'none'" tabindex="-1" role="dialog" aria-labelledby="updateUserModalLabel" aria-hidden="!userToUpdate">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateUserModalLabel">
+            <i class="fas fa-pen me-2"></i> Update user information
+          </h5>
+          <button type="button" class="btn-close" (click)="closeUpdateModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" *ngIf="userToUpdate">
+          <p class="text-muted small mb-3">Editing: {{ userToUpdate.email }}</p>
+          <form #updateForm="ngForm">
+            <div class="row g-3">
+              <div class="col-12 col-sm-6">
+                <label for="updateFirstName" class="form-label">First name</label>
+                <input type="text" class="form-control" id="updateFirstName" name="firstName"
+                       [(ngModel)]="updateFirstName" placeholder="First name">
+              </div>
+              <div class="col-12 col-sm-6">
+                <label for="updateLastName" class="form-label">Last name</label>
+                <input type="text" class="form-control" id="updateLastName" name="lastName"
+                       [(ngModel)]="updateLastName" placeholder="Last name">
+              </div>
+              <div class="col-12">
+                <label for="updateCompanyName" class="form-label">Company name</label>
+                <input type="text" class="form-control" id="updateCompanyName" name="companyName"
+                       [(ngModel)]="updateCompanyName" placeholder="Company name">
+              </div>
+              <div class="col-12 col-sm-6">
+                <label for="updatePhone" class="form-label">Phone</label>
+                <input type="text" class="form-control" id="updatePhone" name="phone"
+                       [(ngModel)]="updatePhone" placeholder="Phone">
+              </div>
+              <div class="col-12 col-sm-6">
+                <label for="updateAddress" class="form-label">Address</label>
+                <input type="text" class="form-control" id="updateAddress" name="address"
+                       [(ngModel)]="updateAddress" placeholder="Address, City, Country">
+              </div>
+              <div class="col-12">
+                <label for="updateAbout" class="form-label">About</label>
+                <textarea class="form-control" id="updateAbout" name="about" rows="3"
+                          [(ngModel)]="updateAbout" placeholder="Bio or description"></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeUpdateModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="saveUpdateUser()" [disabled]="updateSaving">
+            <span *ngIf="!updateSaving"><i class="fas fa-save me-1"></i> Save changes</span>
+            <span *ngIf="updateSaving"><i class="fas fa-spinner fa-spin me-1"></i> Saving...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade" [class.show]="userToUpdate" *ngIf="userToUpdate"></div>
   </div>
 </div>

@@ -144,3 +144,37 @@
       left: 50%;
     }
   }
+
+  /* Signup form: two fields per row, responsive */
+  .signup-form-grid {
+    width: 100%;
+    max-width: 560px;
+  }
+  .signup-form-grid .row {
+    --bs-gutter-x: 0.75rem;
+    --bs-gutter-y: 0.75rem;
+  }
+  .signup-field {
+    position: relative;
+    min-height: 46px;
+    padding: 0.35rem 0.25rem;
+    margin-bottom: 0.25rem;
+  }
+  .signup-field input,
+  .signup-field select,
+  .signup-field textarea {
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  .signup-field textarea {
+    min-height: 52px;
+    resize: none;
+  }
+  /* Error messages in normal flow so they don't overlap; reserve space per field */
+  .signup-field .invalid-feedback {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 0;
+    position: static;
+  }

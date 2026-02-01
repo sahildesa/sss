@@ -30,7 +30,7 @@
           </button>
         </div> -->
 
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item" *ngFor="let link of navLinks">
             <a
               class="nav-link mx-2 text-decoration-none nav-underline"
@@ -44,6 +44,23 @@
             >
               {{ link.label }}
             </a>
+          </li>
+          <!-- Logged in: show user initials + session info; otherwise Login -->
+          <li class="nav-item" *ngIf="!(authService.isLoggedIn$ | async)">
+            <a class="nav-link mx-2 text-decoration-none nav-underline" [routerLink]="['/login']" (click)="collapseNavbar()">
+              Login
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="authService.isLoggedIn$ | async">
+            <div class="d-flex align-items-center gap-2 px-2" title="Logged in">
+              <span class="user-initials rounded-circle d-inline-flex align-items-center justify-content-center text-white bg-primary"
+                    style="width: 36px; height: 36px; font-size: 0.85rem; font-weight: 600;">
+                {{ getInitials(authService.getCurrentUser()) }}
+              </span>
+              <span class="d-none d-md-inline text-muted small">
+                {{ getCurrentUserLabel() }}
+              </span>
+            </div>
           </li>
         </ul>
       </div>

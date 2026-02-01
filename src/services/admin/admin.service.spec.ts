@@ -261,7 +261,7 @@ describe('AdminService', () => {
         expect(response.data.companyName).toBe('Updated Company');
       });
 
-      const req = httpMock.expectOne(`${baseUrl}/auth/updateUser/${entityKey}`);
+      const req = httpMock.expectOne(`${baseUrl}/auth/${entityKey}/updateUser/`);
       expect(req.request.method).toBe('PATCH');
       expect(req.request.body).toEqual(updates);
       req.flush(mockResponse);
@@ -462,7 +462,7 @@ describe('AdminService', () => {
         }
       });
 
-      const req = httpMock.expectOne(`${baseUrl}/auth/updateUser/12345-abcde`);
+      const req = httpMock.expectOne(`${baseUrl}/auth/12345-abcde/updateUser/`);
       req.flush({ 
         message: 'Validation error' 
       }, { status: 400, statusText: 'Bad Request' });

@@ -4,6 +4,7 @@ import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import gsap from 'gsap';
 import * as bootstrap from 'bootstrap';
 import { filter } from 'rxjs';
+import { AuthService } from '../services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,11 @@ export class AppComponent {
   isAuthRoute: boolean = false;
   hover = '';
 
-constructor(
+  constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    public authService: AuthService
   ) {
     this.router.events
       .pipe(filter((event: any) => event instanceof NavigationEnd))
@@ -78,14 +80,11 @@ constructor(
   }
 
   navLinks = [
-     { path: '/home', label: 'Home' },
-    // { path: '/about', label: 'About Us' },
-    // { path: '/about', label: 'Our Services' },
+    { path: '/home', label: 'Home' },
     { path: '/coinzee', label: 'Coinzee' },
     { path: '/about', label: 'About Us' },
     { path: '/terms', label: 'Terms' },
-    { path: '/privacy', label: 'Privacy' },
-   {path:'/login', label:'Login'}
+    { path: '/privacy', label: 'Privacy' }
   ];
 
   aboutUsLinks = [
@@ -110,6 +109,21 @@ constructor(
 
   isActive(path: string): boolean {
     return this.router.url === path || this.hover === path;
+  }
+
+  getInitials(user: { firstName?: string; lastName?: string; email?: string } | null): string {
+    if (!user) return '?';
+    const first = (user.firstName || '').trim().charAt(0);
+    const last = (user.lastName || '').trim().charAt(0);
+    if (first || last) return (first + last).toUpperCase() || (user.email || '?').charAt(0).toUpperCase();
+    return (user.email || '?').charAt(0).toUpperCase();
+  }
+
+  getCurrentUserLabel(): string {
+    const u = this.authService.getCurrentUser();
+    if (!u) return '';
+    const name = ((u.firstName || '') + ' ' + (u.lastName || '')).trim();
+    return name ? `${name} (${u.email})` : (u.email || '');
   }
 
   shouldShowFooter(): boolean {

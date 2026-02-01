@@ -7,6 +7,12 @@ import { CookieService } from 'ngx-cookie-service';
 import { NgChartsModule } from 'ng2-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { ThreedModelDirective } from './threed-model.directive';
 
 import { AppComponent } from './app.component';
@@ -26,6 +32,10 @@ import { CategoryPageComponent } from './pages/category-page/category-page.compo
 import { NextPageComponent } from './pages/next-page/next-page.component';
 import { AdminDashboardComponent } from './pages/admin/admin-dashboard.component';
 import { LoginComponent } from './login/login.component';
+import { SignupPendingDialogComponent } from './login/signup-pending-dialog/signup-pending-dialog.component';
+import { DashboardLayoutComponent } from './pages/dashboard-layout/dashboard-layout.component';
+import { DashboardUsersComponent } from './pages/dashboard-layout/dashboard-users/dashboard-users.component';
+import { DashboardProductsComponent } from './pages/dashboard-layout/dashboard-products/dashboard-products.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +57,10 @@ import { LoginComponent } from './login/login.component';
     NextPageComponent,
     AdminDashboardComponent,
     LoginComponent,
+    SignupPendingDialogComponent,
+    DashboardLayoutComponent,
+    DashboardUsersComponent,
+    DashboardProductsComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,7 +70,13 @@ import { LoginComponent } from './login/login.component';
     NgChartsModule,
     RouterModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent],

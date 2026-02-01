@@ -5,6 +5,19 @@ import { environment } from 'src/environments/environment';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
+/** Payload for signup API binding. Matches API: email, password, role, phone, firstName, lastName, companyName, address, about. */
+export interface SignupPayload {
+  email: string;
+  password: string;
+  role: string;
+  phone?: string;
+  firstName: string;
+  lastName: string;
+  companyName?: string;
+  address?: string;
+  about?: string;
+}
+
 export interface User {
   entityKey: string;
   email: string;
@@ -51,9 +64,8 @@ export class AuthService {
       this.http.post(`${this.apiUrl}auth/login/`, body, { headers }).subscribe(
         (response: any) => {
           if (response.user) {
-            // Ensure arrays exist
-            response.user.approvedRoles = response.user.approvedRoles || [];
-            response.user.pendingRoles = response.user.pendingRoles || [];
+            // Ensure arrays exist; derive approvedRoles/pendingRoles from roles if missing
+            this.normalizeUserRoles(response.user);
             
             this.setUserInCookie(response.user);
             this.currentUserSubject.next(response.user);
@@ -75,23 +87,11 @@ export class AuthService {
     });
   }
 
-  signup(userData: any): Observable<any> {
+  /** Signup API binding: POST to auth/signup/ with SignupPayload. Ready for backend. */
+  signup(payload: SignupPayload): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    
-    // Prepare data for signup based on your backend requirements
-    const nameParts = userData.username.split(' ');
-    const signupPayload = {
-      email: userData.email,
-      password: userData.password,
-      firstName: nameParts[0],
-      lastName: nameParts.slice(1).join(' ') || '',
-      role: userData.role,
-      phone: userData.phone || '',
-      companyName: userData.companyName || '',
-      address: userData.address || ''
-    };
-    
-    return this.http.post(`${this.apiUrl}auth/signup/`, signupPayload, { headers });
+    const url = `${this.apiUrl}auth/signup/`;
+    return this.http.post(url, payload, { headers });
   }
 
   getPendingUsers(): Observable<any> {
@@ -104,14 +104,27 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}auth/approveUser/`, payload, { headers });
   }
 
+  /** Set approvedRoles/pendingRoles from roles when missing; normalize isActive/isVerified (support API snake_case). */
+  private normalizeUserRoles(user: any): void {
+    user.approvedRoles = user.approvedRoles || [];
+    user.pendingRoles = user.pendingRoles || [];
+    if (user.roles && Array.isArray(user.roles) && user.approvedRoles.length === 0 && user.pendingRoles.length === 0) {
+      user.approvedRoles = user.roles.filter((r: any) => r && r.isApproved && r.role).map((r: any) => r.role);
+      user.pendingRoles = user.roles.filter((r: any) => r && !r.isApproved && r.role).map((r: any) => r.role);
+    }
+    // Support API snake_case and coerce to boolean so AuthGuard doesn't block when backend sends is_active/is_verified
+    const active = user.isActive ?? user.is_active;
+    const verified = user.isVerified ?? user.is_verified;
+    user.isActive = active === true || active === 'true' || active === 1;
+    user.isVerified = verified === true || verified === 'true' || verified === 1;
+  }
+
   getUserInfo(): User | null {
     const userCookie = this.cookieService.get('user');
     if (userCookie) {
       try {
         const user = JSON.parse(userCookie);
-        // Ensure arrays exist
-        user.approvedRoles = user.approvedRoles || [];
-        user.pendingRoles = user.pendingRoles || [];
+        this.normalizeUserRoles(user);
         this.currentUserSubject.next(user);
         return user;
       } catch (error) {
@@ -136,11 +149,18 @@ export class AuthService {
     }
   }
 
+  /** Hardcoded logout API binding: POST to auth/logout/ then clear session and redirect */
+  logoutApi(): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.apiUrl}auth/logout/`;
+    return this.http.post(url, {}, { headers });
+  }
+
   logout() {
     this.cookieService.delete('user', '/');
     this.currentUserSubject.next(null);
     this.isLoggedInSubject.next(false);
-    this.router.navigate(['/auth']);
+    this.router.navigate(['/login']);
   }
 
   private setUserInCookie(user: User): void {
@@ -193,10 +213,9 @@ export class AuthService {
 
     if (currentUser.approvedRoles.includes('SuperAdmin')) {
       this.router.navigate(['/admin/dashboard']);
-    } else if (currentUser.approvedRoles.includes('Vendor')) {
-      this.router.navigate(['/home']);
-    } else if (currentUser.approvedRoles.includes('Distributor')) {
-      this.router.navigate(['/home']);
+    } else if (currentUser.approvedRoles.includes('Vendor') || currentUser.approvedRoles.includes('Distributor')) {
+      // Dashboard layout with Analytics, Users, Products tabs
+      this.router.navigate(['/dashboard']);
     } else if (currentUser.pendingRoles && currentUser.pendingRoles.length > 0) {
       // User has pending approval
       this.router.navigate(['/auth'], { queryParams: { pending: true } });

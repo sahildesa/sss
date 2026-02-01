@@ -1,0 +1,42 @@
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Dashboard</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <a class="sidebar-link" 
+         routerLink="/dashboard/analytics" 
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: false }">
+        <span class="sidebar-icon">📊</span>
+        <span>Analytics</span>
+      </a>
+      <a class="sidebar-link" 
+         routerLink="/dashboard/users" 
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: false }">
+        <span class="sidebar-icon">👥</span>
+        <span>Users</span>
+      </a>
+      <a class="sidebar-link" 
+         routerLink="/dashboard/products" 
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: false }">
+        <span class="sidebar-icon">📦</span>
+        <span>Products</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <button type="button" class="sidebar-link sidebar-logout" (click)="onLogout()">
+        <span class="sidebar-icon">🚪</span>
+        <span>Logout</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="dashboard-main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -23,15 +23,15 @@ class="hero-section text-center d-flex align-items-center justify-content-center
 <div class="filter-section mb-3">
       <h4>Store reviews</h4>
       <div class="checkbox-group">
-        <label><input type="checkbox"> 4.0 & up</label>
-        <label><input type="checkbox"> 4.5 & up</label>
-        <label><input type="checkbox"> 5.0</label>
+        <label><input type="checkbox" autocomplete="off"> 4.0 & up</label>
+        <label><input type="checkbox" autocomplete="off"> 4.5 & up</label>
+        <label><input type="checkbox" autocomplete="off"> 5.0</label>
       </div>
     </div>
 
     <div class="filter-section mb-3">
       <h4>Category</h4>
-      <select #categorySelect class="form-select" (change)="changeCategory(categorySelect.value)">
+      <select #categorySelect class="form-select" autocomplete="off" (change)="changeCategory(categorySelect.value)">
         <option value="">Any Category</option>
         <option *ngFor="let opt of browseOptions" [value]="opt">{{ opt }}</option>
       </select>
@@ -39,18 +39,18 @@ class="hero-section text-center d-flex align-items-center justify-content-center
 
     <div class="filter-section mb-3">
       <h4>Price</h4>
-      <input type="number" placeholder="Min." class="form-control mb-2">
-      <input type="number" placeholder="Max." class="form-control mb-2">
+      <input type="number" placeholder="Min." class="form-control mb-2" autocomplete="off">
+      <input type="number" placeholder="Max." class="form-control mb-2" autocomplete="off">
       <button class="btn btn-primary btn-sm w-100">OK</button>
     </div>
 
     <div class="filter-section mb-3">
       <h4>Supplier country/region</h4>
       <div class="checkbox-group">
-        <label><input type="checkbox"> India</label>
-        <label><input type="checkbox"> China</label>
-        <label><input type="checkbox"> United States</label>
-        <label><input type="checkbox"> Germany</label>
+        <label><input type="checkbox" autocomplete="off"> India</label>
+        <label><input type="checkbox" autocomplete="off"> China</label>
+        <label><input type="checkbox" autocomplete="off"> United States</label>
+        <label><input type="checkbox" autocomplete="off"> Germany</label>
       </div>
     </div>
 
@@ -500,14 +500,14 @@ High-end Graphics Cards
 <!-- Billing Info -->
 <div class="col-md-7">
 <h5>Billing Information</h5>
-<form>
+<form autocomplete="off">
 <div class="mb-3">
 <label>Name</label>
 <input type="text" class="form-control" placeholder="Enter Name" />
 </div>
 <div class="mb-3">
 <label>Email</label>
-<input type="email" class="form-control" placeholder="you@example.com" />
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" />
 </div>
 <div class="mb-3">
 <label>Address</label>
@@ -582,7 +582,7 @@ High-end Graphics Cards
 <!-- CARD DETAILS FORM -->
 <div *ngIf="selectedPaymentMethod === 'creditCard'">
   <h5 class="mt-4">Payment Details</h5>
-  <form>
+  <form autocomplete="off">
     <div class="mb-3">
       <label>Card Number</label>
       <input
@@ -598,7 +598,7 @@ High-end Graphics Cards
       </div>
       <div class="col-md-6 mb-3">
         <label>CVV</label>
-        <input type="password" class="form-control" placeholder="123" />
+        <input type="password" class="form-control" autocomplete="off" placeholder="123" />
       </div>
     </div>
   </form>
@@ -617,7 +617,7 @@ High-end Graphics Cards
 <!-- NET BANKING DETAILS -->
 <div *ngIf="selectedPaymentMethod === 'netBanking'">
   <h5 class="mt-4">Select Your Bank</h5>
-  <select class="form-select">
+  <select class="form-select" autocomplete="off">
     <option selected disabled>Select Bank</option>
     <option value="sbi">State Bank of India</option>
     <option value="hdfc">HDFC Bank</option>
@@ -660,18 +660,18 @@ High-end Graphics Cards
 <h3>Login</h3>
 <button class="btn btn-outline-danger btn-sm" (click)="closeSection()">✕</button>
 </div>
-<form>
+<form autocomplete="off">
 <div class="mb-3">
 <label>Email Address</label>
-<input type="email" class="form-control" placeholder="you@example.com" />
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" />
 </div>
 <div class="mb-3">
 <label>Password</label>
-<input type="password" class="form-control" placeholder="••••••••" />
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" />
 </div>
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div>
-<input type="checkbox" id="remember" />
+<input type="checkbox" id="remember" autocomplete="off" />
 <label for="remember">Remember me</label>
 </div>
 <a href="#" class="text-decoration-none">Forgot password?</a>
@@ -694,22 +694,22 @@ High-end Graphics Cards
 <h3 class="m-0">Create Account</h3>
 <button class="btn btn-outline-danger btn-sm" (click)="closeSection()">✕</button>
 </div>
-<form (submit)="onSignupSubmit($event)">
+<form (submit)="onSignupSubmit($event)" autocomplete="off">
 <div class="mb-3">
 <label>Full Name</label>
 <input type="text" class="form-control" placeholder="Enter Name" required />
 </div>
 <div class="mb-3">
 <label>Email Address</label>
-<input type="email" class="form-control" placeholder="you@example.com" required />
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" required />
 </div>
 <div class="mb-3">
 <label>Password</label>
-<input type="password" class="form-control" placeholder="••••••••" required minlength="6" />
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" required minlength="6" />
 </div>
 <div class="mb-3">
 <label>Confirm Password</label>
-<input type="password" class="form-control" placeholder="••••••••" required minlength="6" />
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" required minlength="6" />
 </div>
 <button type="submit" class="btn btn-success w-100 mt-2">Sign Up</button>
 </form>

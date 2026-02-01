@@ -2,7 +2,9 @@ import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@ang
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
-import { AuthService } from '../../services/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthService, SignupPayload } from '../../services/auth/auth.service';
+import { SignupPendingDialogComponent } from './signup-pending-dialog/signup-pending-dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +20,8 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   errorMessage: string = '';
   successMessage: string = '';
   isPendingApproval: boolean = false;
+  /** True after user has attempted signup submit; used to show confirm-password errors only after submit */
+  signupSubmitAttempted: boolean = false;
 
   loginForm!: FormGroup;
   signupForm!: FormGroup;
@@ -27,7 +31,8 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog
   ) {
     this.initializeForms();
     
@@ -60,6 +65,10 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       role: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl(''),
+      companyName: new FormControl(''),
+      address: new FormControl(''),
+      about: new FormControl(''),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', Validators.required),
       agreeTerms: new FormControl(false, Validators.requiredTrue)
@@ -123,6 +132,7 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   switchToSignIn(): void {
     this.isSignUpMode = false;
     this.isPendingApproval = false;
+    this.signupSubmitAttempted = false;
     if (this.container && this.container.nativeElement) {
       this.container.nativeElement.classList.remove('sign-up-mode');
     }
@@ -133,79 +143,108 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.clearMessages();
-      
+
       const { email, password } = this.loginForm.value;
       console.log('Login Payload', this.loginForm.value);
-      this.router.navigate(['/admin/dashboard']);
-      // this.authService.login(email, password)
-      //   .subscribe({
-      //     next: (response) => {
-      //       this.isLoading = false;
+
+      this.authService.login(email, password)
+        .subscribe({
+          next: (response) => {
+            this.isLoading = false;
             
-      //       if (response.user) {
-      //         this.handleLoginResponse(response.user);
-      //       } else {
-      //         this.errorMessage = response.message || 'Login failed. Please try again.';
-      //       }
-      //     },
-      //     error: (error) => {
-      //       this.isLoading = false;
+            if (response.user) {
+              const user = response.user;
+              if (user.approvedRoles && user.approvedRoles.length > 0) {
+                this.navigateBasedOnRole(user);
+              } else if (user.pendingRoles && user.pendingRoles.length > 0) {
+                this.isPendingApproval = true;
+                this.errorMessage = 'Your account is pending admin approval. You will be notified once approved.';
+              } else {
+                this.errorMessage = 'Your account has no assigned roles. Please contact administrator.';
+              }
+            } else {
+              this.errorMessage = response.message || 'Login failed. Please try again.';
+            }
+          },
+          error: (error) => {
+            this.isLoading = false;
             
-      //       if (error.status === 401) {
-      //         this.errorMessage = 'Invalid email or password';
-      //       } else if (error.status === 403) {
-      //         this.errorMessage = 'Account not approved yet. Please wait for admin approval.';
-      //       } else if (error.status === 400) {
-      //         this.errorMessage = error.error?.message || 'Invalid request';
-      //       } else {
-      //         this.errorMessage = error.error?.message || 'An error occurred. Please try again.';
-      //       }
-      //     }
-      //   });
+            if (error.status === 401) {
+              this.errorMessage = 'Invalid email or password';
+            } else if (error.status === 403) {
+              this.errorMessage = 'Account not approved yet. Please wait for admin approval.';
+            } else if (error.status === 400) {
+              this.errorMessage = error.error?.message || 'Invalid request';
+            } else {
+              this.errorMessage = error.error?.message || 'An error occurred. Please try again.';
+            }
+          }
+        });
     } else {
       this.loginForm.markAllAsTouched();
       this.errorMessage = 'Please fill in all required fields correctly';
     }
   }
 
+  /** Signup API binding: build SignupPayload from form and call AuthService.signup(). */
   onSignUpSubmit(): void {
+    this.signupSubmitAttempted = true;
     this.signupForm.updateValueAndValidity();
 
     if (this.signupForm.valid) {
       this.isLoading = true;
       this.clearMessages();
-      
+
       const formData = this.signupForm.value;
-      
-      this.authService.signup(formData)
-        .subscribe({
-          next: (response) => {
-            this.isLoading = false;
-            
-            if (response.success) {
-              this.successMessage = 'Registration successful! Your account is pending admin approval.';
-              
-              // Switch to login mode after successful registration
-              setTimeout(() => {
-                this.switchToSignIn();
-                this.signupForm.reset();
-              }, 3000);
-            } else {
-              this.errorMessage = response.message || 'Registration failed. Please try again.';
-            }
-          },
-          error: (error) => {
-            this.isLoading = false;
-            
-            if (error.status === 400) {
-              this.errorMessage = error.error?.message || 'User with this email already exists.';
-            } else if (error.status === 500) {
-              this.errorMessage = 'Server error. Please try again later.';
-            } else {
-              this.errorMessage = error.error?.message || 'An error occurred during registration. Please try again.';
-            }
+      const nameParts = (formData.username || '').trim().split(/\s+/);
+      const signupPayload: SignupPayload = {
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        phone: formData.phone || '',
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        companyName: formData.companyName || '',
+        address: formData.address || '',
+        about: formData.about || ''
+      };
+
+      this.authService.signup(signupPayload).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          // API returns { message, user } on success – treat as success when user is present
+          if (response && response.user != null) {
+            const dialogRef = this.dialog.open(SignupPendingDialogComponent, {
+              width: '420px',
+              disableClose: false
+            });
+            dialogRef.afterClosed().subscribe(() => {
+              this.switchToSignIn();
+              this.signupForm.reset();
+            });
+          } else if (response && response.message) {
+            this.errorMessage = response.message;
+          } else {
+            this.errorMessage = 'Registration failed. Please try again.';
           }
-        });
+        },
+        error: (error) => {
+          this.isLoading = false;
+          const body = error?.error;
+          if (error?.status === 400) {
+            this.errorMessage = (body?.message) || body?.email?.[0] || 'User with this email already exists.';
+          } else if (error?.status === 500) {
+            const msg = typeof body === 'string' ? body : (body?.error || body?.message);
+            if (msg && typeof msg === 'string' && msg.includes('User may already exist')) {
+              this.errorMessage = 'User may already exist';
+            } else {
+              this.errorMessage = msg || 'Server error. Please try again later.';
+            }
+          } else {
+            this.errorMessage = (typeof body === 'string' ? body : (body?.message || body?.error)) || 'An error occurred during registration. Please try again.';
+          }
+        }
+      });
     } else {
       this.signupForm.markAllAsTouched();
       
@@ -219,27 +258,12 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private handleLoginResponse(user: any): void {
-    // Check if user has approved roles
-    if (user.approvedRoles && user.approvedRoles.length > 0) {
-      this.navigateBasedOnRole(user);
-    } else if (user.pendingRoles && user.pendingRoles.length > 0) {
-      // User has pending approval
-      this.isPendingApproval = true;
-      this.errorMessage = 'Your account is pending admin approval. You will be notified once approved.';
-    } else {
-      // No roles assigned
-      this.errorMessage = 'Your account has no assigned roles. Please contact administrator.';
-    }
-  }
-
   private navigateBasedOnRole(user: any): void {
     if (user.approvedRoles.includes('SuperAdmin')) {
       this.router.navigate(['/admin/dashboard']);
-    } else if (user.approvedRoles.includes('Vendor')) {
-      this.router.navigate(['/vendor/dashboard']);
-    } else if (user.approvedRoles.includes('Distributor')) {
-      this.router.navigate(['/distributor/dashboard']);
+    } else if (user.approvedRoles.includes('Vendor') || user.approvedRoles.includes('Distributor')) {
+      // Dashboard layout with Analytics, Users, Products tabs
+      this.router.navigate(['/dashboard']);
     } else {
       this.errorMessage = 'No dashboard available for your role. Please contact administrator.';
     }

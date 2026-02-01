@@ -22,18 +22,17 @@ export class AuthGuard implements CanActivate {
       return false;
     }
     
-    // Check if user is active and verified
-    if (!user.isActive || !user.isVerified) {
-      // User is not active or not verified
+    // Check if user is active
+    if (!user.isActive) {
       this.router.navigate(['/auth'], { 
         queryParams: { 
-          error: 'Your account is not active or not verified. Please contact administrator.' 
+          error: 'Your account is not active. Please contact administrator.' 
         } 
       });
       return false;
     }
     
-    // Check if user has any approved roles
+    // Check if user has any approved roles (having an approved role counts as "verified" for dashboard access)
     if (!user.approvedRoles || user.approvedRoles.length === 0) {
       // If user has pending roles, show pending message
       if (user.pendingRoles && user.pendingRoles.length > 0) {
@@ -71,10 +70,8 @@ export class AuthGuard implements CanActivate {
   private redirectToUserDashboard(user: any): void {
     if (user.approvedRoles.includes('SuperAdmin')) {
       this.router.navigate(['/admin/dashboard']);
-    } else if (user.approvedRoles.includes('Vendor')) {
-      this.router.navigate(['/vendor/dashboard']);
-    } else if (user.approvedRoles.includes('Distributor')) {
-      this.router.navigate(['/distributor/dashboard']);
+    } else if (user.approvedRoles.includes('Vendor') || user.approvedRoles.includes('Distributor')) {
+      this.router.navigate(['/dashboard']);
     } else {
       // No valid role, redirect to auth
       this.router.navigate(['/auth']);
@@ -105,11 +102,9 @@ export class SuperAdminGuard implements CanActivate {
       return true;
     }
     
-    // Redirect to appropriate dashboard based on user's role
-    if (user.approvedRoles && user.approvedRoles.includes('Vendor')) {
-      this.router.navigate(['/vendor/dashboard']);
-    } else if (user.approvedRoles && user.approvedRoles.includes('Distributor')) {
-      this.router.navigate(['/distributor/dashboard']);
+    // Redirect to dashboard layout (Analytics, Users, Products) for non-SuperAdmin
+    if (user.approvedRoles && (user.approvedRoles.includes('Vendor') || user.approvedRoles.includes('Distributor'))) {
+      this.router.navigate(['/dashboard']);
     } else {
       this.router.navigate(['/auth']);
     }
@@ -144,7 +139,7 @@ export class VendorGuard implements CanActivate {
     if (user.approvedRoles && user.approvedRoles.includes('SuperAdmin')) {
       this.router.navigate(['/admin/dashboard']);
     } else if (user.approvedRoles && user.approvedRoles.includes('Distributor')) {
-      this.router.navigate(['/distributor/dashboard']);
+      this.router.navigate(['/dashboard']);
     } else {
       this.router.navigate(['/auth']);
     }
@@ -179,7 +174,7 @@ export class DistributorGuard implements CanActivate {
     if (user.approvedRoles && user.approvedRoles.includes('SuperAdmin')) {
       this.router.navigate(['/admin/dashboard']);
     } else if (user.approvedRoles && user.approvedRoles.includes('Vendor')) {
-      this.router.navigate(['/vendor/dashboard']);
+      this.router.navigate(['/dashboard']);
     } else {
       this.router.navigate(['/auth']);
     }

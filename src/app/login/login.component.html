@@ -20,9 +20,9 @@
     <!-- Desktop View -->
     <div class="signin-signup position-absolute top-50 start-75 translate-middle d-grid z-5 d-lg-grid d-none" style="transition: 1s 0.7s ease-in-out; grid-template-columns: 1fr; z-index:1">
       <!-- Login Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" autocomplete="off"
             class="sign-in-form d-flex flex-column align-items-center justify-content-center px-lg-5 overflow-hidden" style="transition: all 0.2s 0.7s;">
-        <h2 class="mb-2" style="font-size: 2.2rem; color: #444;">Login</h2>
+        <h2 class="mb-2" style="color: #444;">Welcome Back! <br>Log In to Continue</h2>
         
         <!-- Error Message -->
         <div *ngIf="errorMessage" class="alert alert-danger mb-2 w-100 text-center" style="max-width: 380px; font-size: 0.9rem; padding: 8px;">
@@ -41,7 +41,7 @@
         
         <!-- Email Input -->
         <div class="d-grid align-items-center w-100 mx-auto my-2 position-relative" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 100%; padding: 0 0.4rem;">
-          <input type="email" placeholder="Email" formControlName="email" required
+          <input type="email" placeholder="Email" formControlName="email" required autocomplete="off"
                  class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
                  [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
                  onfocus="this.style.borderBottom='2px solid #0f243d'"
@@ -55,7 +55,7 @@
         
         <!-- Password Input -->
         <div class="d-flex align-items-center w-100 mx-auto my-2 position-relative" style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <input type="password" placeholder="Password" formControlName="password" required
+          <input type="password" placeholder="Password" formControlName="password" required autocomplete="off"
                  class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
                  [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
                  onfocus="this.style.borderBottom='2px solid #0f243d'" 
@@ -85,110 +85,82 @@
       </form>
 
       <!-- Signup Form -->
-      <form [formGroup]="signupForm" (ngSubmit)="onSignUpSubmit()"
+      <form [formGroup]="signupForm" (ngSubmit)="onSignUpSubmit()" autocomplete="off"
             class="sign-up-form d-flex flex-column align-items-center justify-content-center px-lg-5 overflow-hidden" style="transition: all 0.2s 0.7s; z-index:1">
-        <h2 class="mb-2" style="font-size: 2.2rem; color: #444;">Sign Up</h2>
+        <h2 class="mb-2" style="font-size: 2.2rem; color: #444;">Register to Get Started</h2>
 
-        <!-- Error Message -->
-        <div *ngIf="errorMessage" class="alert alert-danger mb-2 w-100 text-center" style="max-width: 380px; font-size: 0.9rem; padding: 8px;">
-          {{ errorMessage }}
-        </div>
-        
-        <!-- Success Message -->
-        <div *ngIf="successMessage" class="alert alert-success mb-2 w-100 text-center" style="max-width: 380px; font-size: 0.9rem; padding: 8px;">
-          {{ successMessage }}
-        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger mb-2 w-100 text-center" style="max-width: 560px; font-size: 0.85rem; padding: 6px 8px;">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="alert alert-success mb-2 w-100 text-center" style="max-width: 560px; font-size: 0.85rem; padding: 6px 8px;">{{ successMessage }}</div>
 
-        <!-- Role Select -->
-        <div class="d-grid w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 100%; padding: 0 0.4rem;">
-          <select formControlName="role" required class="border-0 border-bottom rounded-0 shadow-none px-0" 
-                  [ngClass]="{'is-invalid': signupForm.get('role')?.invalid && signupForm.get('role')?.touched}"
-                  onfocus="this.style.borderBottom='2px solid #0f243d'"
-                  onblur="this.style.borderBottom='2px solid #ccc'">
-            <option value="" disabled selected>Select Role</option>
-            <option value="SuperAdmin">SuperAdmin</option>
-            <option value="Distributor">Distributor</option>
-            <option value="Vendor">Vendor</option>
-          </select>
-          <div *ngIf="signupForm.get('role')?.invalid && signupForm.get('role')?.touched" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            Please select a role
+        <div class="signup-form-grid mx-auto">
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <select formControlName="role" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                      [ngClass]="{'is-invalid': signupForm.get('role')?.invalid && signupForm.get('role')?.touched}">
+                <option value="" disabled selected>Select Role</option>
+                <option value="SuperAdmin">SuperAdmin</option>
+                <option value="Distributor">Distributor</option>
+                <option value="Vendor">Vendor</option>
+              </select>
+              <div *ngIf="signupForm.get('role')?.invalid && signupForm.get('role')?.touched" class="invalid-feedback">Please select a role</div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Full Name" formControlName="username" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"/>
+              <div *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched" class="invalid-feedback">Full name is required</div>
+            </div>
           </div>
-        </div>
-
-        <!-- Username -->
-        <div class="d-grid w-100 mx-auto my-2 align-items-center position-relative" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 100%; padding: 0 0.4rem;">
-          <input type="text" placeholder="Full Name" formControlName="username" required 
-                 class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                 [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"
-                 onfocus="this.style.borderBottom='2px solid #0f243d'"
-                 onblur="this.style.borderBottom='2px solid #ccc'"/>
-          <div *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            Full name is required
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="email" placeholder="Email" formControlName="email" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"/>
+              <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="invalid-feedback">
+                <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required</span>
+                <span *ngIf="signupForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="tel" placeholder="Phone" formControlName="phone" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
           </div>
-        </div>
-        
-        <!-- Email -->
-        <div class="d-grid w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 100%; padding: 0 0.4rem;">
-          <input type="email" placeholder="Email" formControlName="email" required 
-                 class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                 [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"
-                 onfocus="this.style.borderBottom='2px solid #0f243d'"
-                 onblur="this.style.borderBottom='2px solid #ccc'"/>
-          <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            <div *ngIf="signupForm.get('email')?.errors?.['required']">Email is required</div>
-            <div *ngIf="signupForm.get('email')?.errors?.['email']">Please enter a valid email</div>
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Company Name" formControlName="companyName" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Address" formControlName="address" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
           </div>
-        </div>
-        
-        <!-- Password -->
-        <div class="d-flex w-100 mx-auto my-2 position-relative align-items-center"
-        style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <input type='password' placeholder="Password"
-                formControlName="password" required
-                class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"
-                onfocus="this.style.borderBottom='2px solid #0f243d'"
-                onblur="this.style.borderBottom='2px solid #ccc'"/>
-          <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            <div *ngIf="signupForm.get('password')?.errors?.['required']">Password is required</div>
-            <div *ngIf="signupForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</div>
+          <div class="row">
+            <div class="col-12 signup-field">
+              <textarea formControlName="about" placeholder="About (e.g. business description)" autocomplete="off" rows="2" class="form-control form-control-sm border border-secondary"></textarea>
+            </div>
           </div>
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="d-flex w-100 mx-auto my-2 position-relative align-items-center"
-        style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <input type="password" placeholder="Retype Password"
-                formControlName="confirmPassword" required
-                class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                [ngClass]="{'is-invalid': signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched || signupForm.get('confirmPassword')?.errors?.['mismatch']}"
-                onfocus="this.style.borderBottom='2px solid #0f243d'"
-                onblur="this.style.borderBottom='2px solid #ccc'"/>
-          <div *ngIf="signupForm.get('confirmPassword')?.errors?.['mismatch']" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            Passwords do not match
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="password" placeholder="Password" formControlName="password" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"/>
+              <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" class="invalid-feedback">
+                <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required</span>
+                <span *ngIf="signupForm.get('password')?.errors?.['minlength']">At least 6 characters</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="password" placeholder="Retype Password" formControlName="confirmPassword" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupSubmitAttempted && signupForm.get('confirmPassword')?.invalid}"/>
+              <div *ngIf="signupSubmitAttempted && signupForm.get('confirmPassword')?.errors?.['mismatch']" class="invalid-feedback">Passwords do not match</div>
+              <div *ngIf="signupSubmitAttempted && signupForm.get('confirmPassword')?.errors?.['required']" class="invalid-feedback">Please confirm your password</div>
+            </div>
           </div>
-          <div *ngIf="signupForm.get('confirmPassword')?.errors?.['required'] && signupForm.get('confirmPassword')?.touched" 
-               class="invalid-feedback position-absolute" style="bottom: -20px; font-size: 0.8rem;">
-            Please confirm your password
-          </div>
-        </div>
-        
-        <!-- Terms Checkbox -->
-        <div class="form-check mt-2 w-100" style="max-width: 380px;">
-          <input type="checkbox" class="form-check-input" 
-                 [ngClass]="{'is-invalid': signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched}"
-                 formControlName="agreeTerms" id="agree" />
-          <label class="form-check-label" for="agree">
-            I agree to the <a href="#">Terms</a>
-          </label>
-          <div *ngIf="signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched" 
-               class="invalid-feedback d-block">
-            You must agree to the terms
+          <div class="row">
+            <div class="col-12 signup-field">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" autocomplete="off" formControlName="agreeTerms" id="agree"
+                       [ngClass]="{'is-invalid': signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched}"/>
+                <label class="form-check-label small" for="agree">I agree to the <a href="#">Terms</a></label>
+                <div *ngIf="signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched" class="invalid-feedback d-block">You must agree to the terms</div>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -206,7 +178,7 @@
     <!-- Mobile View -->
     <div class="signin-signup text-align-center position-absolute top-50 start-75 translate-middle d-grid z-5 d-lg-none d-block" style="transition: 1s 0.7s ease-in-out; grid-template-columns: 1fr; z-index:1; ">
       <!-- Login Form -->
-      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()"
+      <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" autocomplete="off"
             class="sign-in-form d-flex flex-column align-items-center justify-content-center px-lg-5 overflow-hidden" style="transition: all 0.2s 0.7s;">
         <h2 class="mb-2" style="font-size: 2.2rem; color: #444;">Login</h2>
         
@@ -226,14 +198,14 @@
         </div>
         
         <div class="d-grid w-100 mx-auto my-2 align-items-center position-relative" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 100%; padding: 0 0.4rem;">
-          <input type="email" placeholder="Email" formControlName="email" required
+          <input type="email" placeholder="Email" formControlName="email" required autocomplete="off"
                  class="form-control border-0 border-bottom rounded-0 shadow-none px-0" 
                  [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
                  onfocus="this.style.borderBottom='2px solid #0f243d'"
                  onblur="this.style.borderBottom='2px solid #ccc'"/>
         </div>
         <div class="d-flex w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <input type="password" placeholder="Password" formControlName="password" required
+          <input type="password" placeholder="Password" formControlName="password" required autocomplete="off"
                  class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
                  [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
                  onfocus="this.style.borderBottom='2px solid #0f243d'" 
@@ -254,84 +226,84 @@
         <p style="cursor: pointer; text-align:center" #signUpBtn id="sign-up-btn" (click)="switchToSignUp()">Don't have an account yet? <a style="text-decoration:underline;">Register</a></p>
       </form>
 
-      <!-- Signup Form -->
-      <form [formGroup]="signupForm" (ngSubmit)="onSignUpSubmit()"
-            class="sign-up-form d-flex flex-column align-items-center justify-content-center overflow-hidden position-absolute" style="transition: all 0.2s 0.7s; z-index:1 ;top: -50% ">
-        <h2 class="mb-2" style="font-size: 2.2rem; color: #444;">Sign Up</h2>
+      <!-- Signup Form (Mobile - same responsive grid) -->
+      <form [formGroup]="signupForm" (ngSubmit)="onSignUpSubmit()" autocomplete="off"
+            class="sign-up-form d-flex flex-column align-items-center justify-content-center overflow-hidden position-absolute px-2" style="transition: all 0.2s 0.7s; z-index:1; top: -50%;">
+        <h2 class="mb-2" style="font-size: 1.75rem; color: #444;">Sign Up</h2>
 
-        <!-- Error Message for Mobile -->
-        <div *ngIf="errorMessage" class="alert alert-danger mb-2 w-100 text-center" style="max-width: 380px; font-size: 0.9rem; padding: 8px;">
-          {{ errorMessage }}
-        </div>
-        
-        <!-- Success Message for Mobile -->
-        <div *ngIf="successMessage" class="alert alert-success mb-2 w-100 text-center" style="max-width: 380px; font-size: 0.9rem; padding: 8px;">
-          {{ successMessage }}
-        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger mb-2 w-100 text-center" style="font-size: 0.85rem; padding: 6px 8px;">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="alert alert-success mb-2 w-100 text-center" style="font-size: 0.85rem; padding: 6px 8px;">{{ successMessage }}</div>
 
-        <!-- Role Select with Icon -->
-        <div class="d-grid w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 15% 85%; padding: 0 0.4rem;">
-          <i style="line-height: 55px; transition: 0.5s; color: #acacac" class="bi bi-person-badge text-align-center text-muted fs-5"></i>
-          <select formControlName="role" required class="border-0 border-bottom rounded-0 shadow-none px-0" 
-                  [ngClass]="{'is-invalid': signupForm.get('role')?.invalid && signupForm.get('role')?.touched}"
-                  onfocus="this.style.borderBottom='2px solid #0f243d'">
-            <option value="" disabled selected>Select Role</option>
-            <option value="SuperAdmin">SuperAdmin</option>
-            <option value="Distributor">Distributor</option>
-            <option value="Vendor">Vendor</option>
-          </select>
-        </div>
-        
-        <!-- Username with Icon -->
-        <div class="d-grid w-100 mx-auto my-2 position-relative" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 15% 85%; padding: 0 0.4rem; align-items:center">
-          <i style="line-height: 55px; transition: 0.5s; color: #acacac" class="fas fa-user text-align-center text-muted fs-5"></i>
-          <input type="text" placeholder="Full Name" formControlName="username" required 
-                 class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                 [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"
-                 onfocus="this.style.borderBottom='2px solid #0f243d'"
-                 onblur="this.style.borderBottom='2px solid #ccc'"/>
-        </div>
-        
-        <!-- Email with Icon -->
-        <div class="d-grid w-100 mx-auto my-2 position-relative text-align-center" style="max-width: 380px; height: 55px; border-radius: 55px; grid-template-columns: 15% 85%; padding: 0 0.4rem; align-items:center">
-          <i style="line-height: 55px; transition: 0.5s; color: #acacac" class="fas fa-envelope text-align-center text-muted fs-5"></i>
-          <input type="email" placeholder="Email" formControlName="email" required 
-                 class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                 [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"
-                 onfocus="this.style.borderBottom='2px solid #0f243d'"
-                 onblur="this.style.borderBottom='2px solid #ccc'"/>
-        </div>
-        
-        <!-- Password with Icon -->
-        <div class="d-flex w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <i class="fas fa-lock text-align-center text-muted fs-5" style="line-height: 55px; transition: 0.5s; color: #acacac; width: 15%;"></i>
-          <input type='password' placeholder="Password"
-                formControlName="password" required
-                class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"
-                onfocus="this.style.borderBottom='2px solid #0f243d'"
-                onblur="this.style.borderBottom='2px solid #ccc'"/>
-        </div>
-
-        <!-- Confirm Password with Icon -->
-        <div class="d-flex w-100 mx-auto my-2 position-relative align-items-center" style="max-width: 380px; height: 55px; border-radius: 55px; padding: 0 0.4rem;">
-          <i class="fas fa-lock text-align-center text-muted fs-5"  style="line-height: 55px; transition: 0.5s; color: #acacac; width: 15%;"></i>
-          <input type="password" placeholder="Retype Password"
-                formControlName="confirmPassword" required
-                class="form-control border-0 border-bottom rounded-0 shadow-none px-0"
-                [ngClass]="{'is-invalid': signupForm.get('confirmPassword')?.invalid && signupForm.get('confirmPassword')?.touched || signupForm.get('confirmPassword')?.errors?.['mismatch']}"
-                onfocus="this.style.borderBottom='2px solid #0f243d'"
-                onblur="this.style.borderBottom='2px solid #ccc'"/>
-        </div>
-        
-        <!-- Terms Checkbox -->
-        <div class="form-check mt-2 w-100" style="max-width: 380px;">
-          <input type="checkbox" class="form-check-input" 
-                 [ngClass]="{'is-invalid': signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched}"
-                 formControlName="agreeTerms" id="agreeMobile" />
-          <label class="form-check-label" for="agreeMobile">
-            I agree to the <a href="#">Terms</a>
-          </label>
+        <div class="signup-form-grid w-100 mx-auto">
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <select formControlName="role" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                      [ngClass]="{'is-invalid': signupForm.get('role')?.invalid && signupForm.get('role')?.touched}">
+                <option value="" disabled selected>Select Role</option>
+                <option value="SuperAdmin">SuperAdmin</option>
+                <option value="Distributor">Distributor</option>
+                <option value="Vendor">Vendor</option>
+              </select>
+              <div *ngIf="signupForm.get('role')?.invalid && signupForm.get('role')?.touched" class="invalid-feedback">Please select a role</div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Full Name" formControlName="username" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('username')?.invalid && signupForm.get('username')?.touched}"/>
+              <div *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched" class="invalid-feedback">Full name is required</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="email" placeholder="Email" formControlName="email" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}"/>
+              <div *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched" class="invalid-feedback">
+                <span *ngIf="signupForm.get('email')?.errors?.['required']">Email is required</span>
+                <span *ngIf="signupForm.get('email')?.errors?.['email']">Valid email required</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="tel" placeholder="Phone" formControlName="phone" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Company Name" formControlName="companyName" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="text" placeholder="Address" formControlName="address" autocomplete="off" class="form-control form-control-sm border border-secondary"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 signup-field">
+              <textarea formControlName="about" placeholder="About (e.g. business description)" autocomplete="off" rows="2" class="form-control form-control-sm border border-secondary"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="password" placeholder="Password" formControlName="password" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupForm.get('password')?.invalid && signupForm.get('password')?.touched}"/>
+              <div *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched" class="invalid-feedback">
+                <span *ngIf="signupForm.get('password')?.errors?.['required']">Password is required</span>
+                <span *ngIf="signupForm.get('password')?.errors?.['minlength']">At least 6 characters</span>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 signup-field">
+              <input type="password" placeholder="Retype Password" formControlName="confirmPassword" required autocomplete="off" class="form-control form-control-sm border border-secondary"
+                     [ngClass]="{'is-invalid': signupSubmitAttempted && signupForm.get('confirmPassword')?.invalid}"/>
+              <div *ngIf="signupSubmitAttempted && signupForm.get('confirmPassword')?.errors?.['mismatch']" class="invalid-feedback">Passwords do not match</div>
+              <div *ngIf="signupSubmitAttempted && signupForm.get('confirmPassword')?.errors?.['required']" class="invalid-feedback">Please confirm your password</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 signup-field">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" autocomplete="off" formControlName="agreeTerms" id="agreeMobile"
+                       [ngClass]="{'is-invalid': signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched}"/>
+                <label class="form-check-label small" for="agreeMobile">I agree to the <a href="#">Terms</a></label>
+                <div *ngIf="signupForm.get('agreeTerms')?.invalid && signupForm.get('agreeTerms')?.touched" class="invalid-feedback d-block">You must agree to the terms</div>
+              </div>
+            </div>
+          </div>
         </div>
         
         <button type="submit" class="btn text-uppercase fw-semibold text-white my-2" 

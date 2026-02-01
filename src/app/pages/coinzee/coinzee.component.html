@@ -493,13 +493,13 @@
             </div>
 
             <div class="col-12 col-md-6 order-0 order-md-1 bg-white">
-              <form *ngIf="currentStep === 1" [formGroup]="enquiryForm" novalidate>
+              <form *ngIf="currentStep === 1" [formGroup]="enquiryForm" novalidate autocomplete="off">
                 <h4 class="fw-bold mb-4 text-center">Enquiry Form</h4>
                 <div class="row g-3">
 
                   <div class="col-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control rounded-3" id="fullName" formControlName="fullName" placeholder="Full Name"
+                      <input type="text" class="form-control rounded-3" id="fullName" formControlName="fullName" placeholder="Full Name" autocomplete="off"
                         [ngClass]="{ 'is-invalid': isInvalid('fullName') }" />
                       <label for="fullName">Full Name</label>
                       <div *ngIf="isInvalid('fullName')" class="invalid-feedback">Please fill your full name</div>
@@ -521,6 +521,7 @@
                       <select
                         class="form-select rounded-start-3"
                         formControlName="countryCode"
+                        autocomplete="off"
                         style="max-width: 120px;"
                         [ngClass]="{ 'is-invalid': isInvalid('countryCode') }"
                       >
@@ -549,7 +550,7 @@
 
                   <div class="col-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control rounded-3" id="company" formControlName="company" placeholder="Company"
+                      <input type="text" class="form-control rounded-3" id="company" formControlName="company" placeholder="Company" autocomplete="off"
                         [ngClass]="{ 'is-invalid': isInvalid('company') }" />
                       <label for="company">Company Name</label>
                       <div *ngIf="isInvalid('company')" class="invalid-feedback">Please enter your company name</div>
@@ -558,7 +559,7 @@
 
                   <div class="col-12">
                     <div class="form-floating">
-                      <input type="text" class="form-control rounded-3" id="address" formControlName="address" placeholder="Address"
+                      <input type="text" class="form-control rounded-3" id="address" formControlName="address" placeholder="Address" autocomplete="off"
                         [ngClass]="{ 'is-invalid': isInvalid('address') }" />
                       <label for="address">Address</label>
                       <div *ngIf="isInvalid('address')" class="invalid-feedback">Please enter your address</div>
@@ -591,7 +592,7 @@
               <p class="mb-1 fw-medium small">Click to upload or drag & drop</p>
               <p class="small text-muted mb-0">.jpg,jpeg,png,svg supported</p>
             </div>
-            <input type="file" (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png,.svg"
+            <input type="file" (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png,.svg" autocomplete="off"
               class="form-control position-absolute top-0 start-0 w-100 h-100 opacity-0" />
           </div>
 

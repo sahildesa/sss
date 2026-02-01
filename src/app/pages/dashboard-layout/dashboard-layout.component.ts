@@ -14,6 +14,11 @@ export class DashboardLayoutComponent {
     private router: Router
   ) {}
 
+  /** True if current user is SuperAdmin (show Users tab only for SuperAdmin). */
+  get isSuperAdmin(): boolean {
+    return this.authService.isSuperAdmin();
+  }
+
   onLogout(): void {
     this.authService.logoutApi().subscribe({
       next: () => this.authService.logout(),

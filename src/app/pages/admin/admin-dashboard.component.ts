@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { ChartConfiguration, ChartData } from 'chart.js';
 import { AdminService, User, VendorListResponse } from '../../../services/admin/admin.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { Product } from '../products/product';
@@ -45,8 +46,8 @@ export class AdminDashboardComponent implements OnInit {
 
   displayedColumns = ADMIN_TABLE_COLUMNS;
 
-  /** Sidebar: 'users' = all user-related info, 'products' = all products-related info */
-  adminSection: 'users' | 'products' = 'users';
+  /** Sidebar: 'analytics' | 'users' | 'products' */
+  adminSection: 'analytics' | 'users' | 'products' = 'analytics';
   
   isLoading = false;
   selectedTab: 'pending' | 'approved' | 'declined' | 'active' = 'pending';
@@ -65,16 +66,6 @@ export class AdminDashboardComponent implements OnInit {
   selectedVendors: Set<string> = new Set();
   selectAll: boolean = false;
 
-  /** Update user modal */
-  userToUpdate: User | null = null;
-  updateFirstName = '';
-  updateLastName = '';
-  updateCompanyName = '';
-  updatePhone = '';
-  updateAddress = '';
-  updateAbout = '';
-  updateSaving = false;
-  
   errorMessage: string = '';
 
   /** Products section (wire to products API when ready) */
@@ -93,6 +84,7 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAllUsers();
+    this.loadProducts();
   }
 
   /** Bind all users from AdminService.getUsersList() – no role filter; all users irrespective of role. */
@@ -124,7 +116,7 @@ export class AdminDashboardComponent implements OnInit {
     this.loadAllUsers();
   }
 
-  /** Load products for Products tab (placeholder – wire to products API when ready) */
+  /** Load products for Analytics and Products tab (placeholder – wire to products API when ready) */
   loadProducts(): void {
     this.productsLoading = true;
     this.products = [];
@@ -141,6 +133,38 @@ export class AdminDashboardComponent implements OnInit {
       this.outOfStockCount = this.products.filter(p => p.availability === 'Out of stock').length;
     }, 300);
   }
+
+  /** Chart data for Analytics: Users by status (reactive from allVendors counts) */
+  get usersChartData(): ChartData<'doughnut'> {
+    return {
+      labels: ['Pending', 'Approved', 'Active', 'Declined'],
+      datasets: [{
+        data: [this.pendingVendors.length, this.approvedVendors.length, this.activeVendors.length, this.declinedVendors.length],
+        backgroundColor: ['#ffc107', '#0d6efd', '#198754', '#dc3545'],
+        borderWidth: 2,
+      }],
+    };
+  }
+  usersChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+  };
+
+  /** Chart data for Analytics: Products by availability */
+  get productsChartData(): ChartData<'doughnut'> {
+    return {
+      labels: ['In Stock', 'Low Stock', 'Out of Stock'],
+      datasets: [{
+        data: [this.inStockCount, this.lowStockCount, this.outOfStockCount],
+        backgroundColor: ['#198754', '#ffc107', '#dc3545'],
+        borderWidth: 2,
+      }],
+    };
+  }
+  productsChartOptions: ChartConfiguration<'doughnut'>['options'] = {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+  };
 
   /** Assign status to every user (Vendor, Distributor, SuperAdmin) from API keys. */
   private assignStatusToAllUsers(users: User[]): User[] {
@@ -392,55 +416,6 @@ export class AdminDashboardComponent implements OnInit {
   // Close details view
   closeDetails(): void {
     this.selectedVendor = null;
-  }
-
-  // Open update user modal
-  openUpdateModal(user: User): void {
-    this.userToUpdate = user;
-    this.updateFirstName = user.firstName ?? '';
-    this.updateLastName = user.lastName ?? '';
-    this.updateCompanyName = user.companyName ?? '';
-    this.updatePhone = user.phone ?? '';
-    this.updateAddress = user.address ?? '';
-    this.updateAbout = user.about ?? '';
-  }
-
-  // Close update user modal
-  closeUpdateModal(): void {
-    this.userToUpdate = null;
-    this.updateSaving = false;
-  }
-
-  // Save updated user (PATCH updateUser with entityKey in URL)
-  saveUpdateUser(): void {
-    const user = this.userToUpdate;
-    if (!user?.entityKey) return;
-
-    const payload = {
-      firstName: this.updateFirstName?.trim() ?? '',
-      lastName: this.updateLastName?.trim() ?? '',
-      companyName: this.updateCompanyName?.trim() ?? '',
-      phone: this.updatePhone?.trim() ?? '',
-      address: this.updateAddress?.trim() ?? '',
-      about: this.updateAbout?.trim() ?? ''
-    };
-
-    this.updateSaving = true;
-    this.adminService.updateUser(user.entityKey, payload).subscribe({
-      next: () => {
-        this.showNotification('success', 'Updated', 'User information updated successfully');
-        this.closeUpdateModal();
-        this.loadAllVendors();
-        if (this.selectedVendor?.entityKey === user.entityKey) {
-          const updated = this.allUsers.find(u => u.entityKey === user.entityKey);
-          if (updated) this.selectedVendor = { ...updated, vendorStatus: this.computeUserStatus(updated) };
-        }
-      },
-      error: (error: Error) => {
-        this.updateSaving = false;
-        this.showNotification('error', 'Error', error.message);
-      }
-    });
   }
 
   /** Current tab users with search + sort applied – for table rows. */

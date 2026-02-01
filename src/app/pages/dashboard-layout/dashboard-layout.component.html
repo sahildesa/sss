@@ -12,7 +12,7 @@
         <span class="sidebar-icon">📊</span>
         <span>Analytics</span>
       </a>
-      <a class="sidebar-link" 
+      <a *ngIf="isSuperAdmin" class="sidebar-link" 
          routerLink="/dashboard/users" 
          routerLinkActive="active"
          [routerLinkActiveOptions]="{ exact: false }">

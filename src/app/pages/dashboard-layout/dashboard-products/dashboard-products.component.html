@@ -1,9 +1,177 @@
 <div class="dashboard-products">
-  <div class="page-header">
-    <h1>Products</h1>
-    <p class="text-muted">Manage products from the sidebar.</p>
+  <!-- Grid view: Amazon-style product cards -->
+  <div *ngIf="viewMode === 'grid'" class="products-grid-view">
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div>
+        <h1 class="mb-1">Products</h1>
+        <p class="text-muted mb-0">Browse and manage your product catalog</p>
+      </div>
+      <div class="d-flex gap-2 flex-wrap">
+        <div class="search-box">
+          <i class="fas fa-search text-muted"></i>
+          <input type="text" class="form-control" placeholder="Search products..." [(ngModel)]="searchTerm" />
+        </div>
+        <button type="button" class="btn btn-primary" (click)="openCreate()">
+          <i class="fas fa-plus me-1"></i> Add product
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Loading products...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredProducts.length === 0" class="empty-state text-center py-5">
+      <i class="fas fa-box-open fa-4x text-muted mb-3"></i>
+      <h5>No products yet</h5>
+      <p class="text-muted mb-4">Add your first product to get started.</p>
+      <button type="button" class="btn btn-primary" (click)="openCreate()">
+        <i class="fas fa-plus me-1"></i> Add product
+      </button>
+    </div>
+
+    <div *ngIf="!loading && filteredProducts.length > 0" class="product-cards-grid">
+      <article *ngFor="let p of filteredProducts" class="product-card" (click)="openDetail(p)">
+        <div class="product-card-image">
+          <img [src]="p.imageUrl || 'assets/images/placeholder-product.png'" [alt]="p.name" />
+          <span class="availability-badge" [ngClass]="availabilityClass(p.availability)">{{ p.availability }}</span>
+        </div>
+        <div class="product-card-body">
+          <h3 class="product-title">{{ p.name }}</h3>
+          <div *ngIf="p.rating != null && p.rating > 0" class="product-rating">
+            <span class="stars">★ {{ p.rating | number:'1.1-1' }}</span>
+            <span class="review-count" *ngIf="p.reviewCount">({{ p.reviewCount }})</span>
+          </div>
+          <p class="product-description">{{ (p.description || '').slice(0, 80) }}{{ (p.description || '').length > 80 ? '…' : '' }}</p>
+          <div class="product-price">
+            <span class="price-current">{{ displayPrice(p) | currency }}</span>
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm w-100 mt-2" (click)="openDetail(p); $event.stopPropagation()">
+            View details
+          </button>
+        </div>
+      </article>
+    </div>
   </div>
-  <div class="content-card">
-    <p>Products content goes here. You can integrate your product list or product management here.</p>
+
+  <!-- Detail view: Amazon-style product page -->
+  <div *ngIf="viewMode === 'detail' && selectedProduct" class="product-detail-view">
+    <button type="button" class="btn btn-link back-link mb-3" (click)="backToGrid()">
+      <i class="fas fa-arrow-left me-1"></i> Back to products
+    </button>
+    <div class="row g-4">
+      <div class="col-12 col-md-5 col-lg-4">
+        <div class="product-detail-image">
+          <img [src]="selectedProduct.imageUrl || 'https://via.placeholder.com/500x500?text=No+Image'" [alt]="selectedProduct.name" onerror="this.src='https://via.placeholder.com/500x500?text=No+Image'" />
+        </div>
+      </div>
+      <div class="col-12 col-md-7 col-lg-8">
+        <div class="product-detail-info">
+          <span *ngIf="selectedProduct.brand" class="product-brand">{{ selectedProduct.brand }}</span>
+          <h1 class="product-detail-title">{{ selectedProduct.name }}</h1>
+          <div *ngIf="selectedProduct.rating != null && selectedProduct.rating > 0" class="product-rating mb-2">
+            <span class="stars">★ {{ selectedProduct.rating | number:'1.1-1' }}</span>
+            <span class="review-count" *ngIf="selectedProduct.reviewCount">{{ selectedProduct.reviewCount }} reviews</span>
+          </div>
+          <div class="product-detail-price mb-3">
+            <span class="price-current fs-3">{{ displayPrice(selectedProduct) | currency }}</span>
+          </div>
+          <p class="product-detail-description" *ngIf="selectedProduct.description">{{ selectedProduct.description }}</p>
+          <div class="product-specs border-top pt-3 mt-3">
+            <table class="table table-sm">
+              <tbody>
+                <tr *ngIf="selectedProduct.sku"><th>SKU</th><td>{{ selectedProduct.sku }}</td></tr>
+                <tr *ngIf="selectedProduct.category"><th>Category</th><td>{{ selectedProduct.category }}</td></tr>
+                <tr><th>Availability</th><td><span class="badge" [ngClass]="availabilityClass(selectedProduct.availability)">{{ selectedProduct.availability }}</span></td></tr>
+                <tr><th>Quantity</th><td>{{ selectedProduct.quantity }}</td></tr>
+                <tr *ngIf="selectedProduct.expiry"><th>Expiry</th><td>{{ selectedProduct.expiry }}</td></tr>
+                <tr><th>Buying price</th><td>{{ selectedProduct.buyingPrice | currency }}</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create product form -->
+  <div *ngIf="viewMode === 'create'" class="product-form-view">
+    <button type="button" class="btn btn-link back-link mb-3" (click)="backToGrid()">
+      <i class="fas fa-arrow-left me-1"></i> Back to products
+    </button>
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h5 class="mb-0">Add new product</h5>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="form-label">Product name <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="name" placeholder="e.g. Wireless Headphones" />
+              <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="invalid-feedback d-block">
+                Name is required (min 2 characters).
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">SKU</label>
+              <input type="text" class="form-control" formControlName="sku" placeholder="e.g. WH-100" />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" formControlName="description" rows="3" placeholder="Product description for customers"></textarea>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Category</label>
+              <input type="text" class="form-control" formControlName="category" placeholder="e.g. Electronics" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Brand</label>
+              <input type="text" class="form-control" formControlName="brand" placeholder="e.g. SoundMax" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Image URL</label>
+              <input type="url" class="form-control" formControlName="imageUrl" placeholder="https://..." />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Availability</label>
+              <select class="form-select" formControlName="availability">
+                <option value="In stock">In stock</option>
+                <option value="Low stock">Low stock</option>
+                <option value="Out of stock">Out of stock</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Buying price <span class="text-danger">*</span></label>
+              <input type="number" class="form-control" formControlName="buyingPrice" min="0" step="0.01" />
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Selling price</label>
+              <input type="number" class="form-control" formControlName="sellingPrice" min="0" step="0.01" />
+            </div>
+            <div class="col-12 col-md-4">
+              <label class="form-label">Quantity <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" formControlName="quantity" placeholder="0" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Threshold (low stock alert)</label>
+              <input type="text" class="form-control" formControlName="threshold" placeholder="0" />
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="form-label">Expiry date</label>
+              <input type="text" class="form-control" formControlName="expiry" placeholder="YYYY-MM-DD or leave blank" />
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid || formSaving">
+              <span *ngIf="!formSaving"><i class="fas fa-save me-1"></i> Save product</span>
+              <span *ngIf="formSaving"><i class="fas fa-spinner fa-spin me-1"></i> Saving...</span>
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="backToGrid()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>

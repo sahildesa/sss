@@ -11,6 +11,11 @@
     </div>
     <nav class="sidebar-nav flex-grow-1 py-2">
       <button type="button" class="sidebar-link w-100 text-start"
+              [class.active]="adminSection === 'analytics'"
+              (click)="adminSection = 'analytics'">
+        <i class="fas fa-chart-line me-2"></i> Analytics
+      </button>
+      <button type="button" class="sidebar-link w-100 text-start"
               [class.active]="adminSection === 'users'"
               (click)="adminSection = 'users'">
         <i class="fas fa-users me-2"></i> Users
@@ -39,9 +44,9 @@
               <i class="fas fa-bars"></i>
             </button>
             <div>
-              <h3 class="mb-0">{{ adminSection === 'users' ? 'Users' : 'Products' }}</h3>
+              <h3 class="mb-0">{{ adminSection === 'analytics' ? 'Analytics' : adminSection === 'users' ? 'Users' : 'Products' }}</h3>
               <small class="text-white opacity-90">
-                {{ adminSection === 'users' ? 'All user-related info (Vendor, Distributor, SuperAdmin)' : 'All products-related info' }}
+                {{ adminSection === 'analytics' ? 'Users & products overview' : adminSection === 'users' ? 'All user-related info (Vendor, Distributor, SuperAdmin)' : 'All products-related info' }}
               </small>
             </div>
           </div>
@@ -63,6 +68,131 @@
         </div>
       </div>
     </div>
+
+    <!-- ANALYTICS SECTION -->
+    <div *ngIf="adminSection === 'analytics'" class="container-fluid py-4 flex-grow-1">
+      <div class="row g-3 mb-4">
+        <div class="col-12">
+          <h5 class="mb-3">Users</h5>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-warning shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Pending</h6>
+                  <h3 class="mb-0">{{ pendingVendors.length }}</h3>
+                </div>
+                <div class="bg-warning p-3 rounded-circle">
+                  <i class="fas fa-clock fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-primary shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Approved</h6>
+                  <h3 class="mb-0">{{ approvedVendors.length }}</h3>
+                </div>
+                <div class="bg-primary p-3 rounded-circle">
+                  <i class="fas fa-check-circle fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-success shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Active</h6>
+                  <h3 class="mb-0">{{ activeVendors.length }}</h3>
+                </div>
+                <div class="bg-success p-3 rounded-circle">
+                  <i class="fas fa-user-check fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="card border-danger shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-muted mb-0">Declined</h6>
+                  <h3 class="mb-0">{{ declinedVendors.length }}</h3>
+                </div>
+                <div class="bg-danger p-3 rounded-circle">
+                  <i class="fas fa-user-times fa-2x text-white"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4 mb-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card shadow-sm rounded-3 h-100">
+            <div class="card-body text-center">
+              <h6 class="mb-3">Users by status</h6>
+              <div class="position-relative" style="height: 220px;">
+                <canvas baseChart [data]="usersChartData" [options]="usersChartOptions" type="doughnut"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card shadow-sm rounded-3 h-100">
+            <div class="card-body text-center">
+              <h6 class="mb-3">Products by availability</h6>
+              <div class="position-relative" style="height: 220px;">
+                <canvas baseChart [data]="productsChartData" [options]="productsChartOptions" type="doughnut"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-4">
+          <div class="card shadow-sm rounded-3 h-100">
+            <div class="card-body">
+              <h6 class="mb-3">Products summary</h6>
+              <div class="row g-2 text-center">
+                <div class="col-4">
+                  <div class="p-2 bg-primary bg-opacity-10 rounded">
+                    <h5 class="mb-0 text-primary">{{ productCount }}</h5>
+                    <small class="text-muted">Total</small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="p-2 bg-success bg-opacity-10 rounded">
+                    <h5 class="mb-0 text-success">{{ inStockCount }}</h5>
+                    <small class="text-muted">In stock</small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="p-2 bg-warning bg-opacity-10 rounded">
+                    <h5 class="mb-0 text-warning">{{ lowStockCount }}</h5>
+                    <small class="text-muted">Low</small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="p-2 bg-danger bg-opacity-10 rounded">
+                    <h5 class="mb-0 text-danger">{{ outOfStockCount }}</h5>
+                    <small class="text-muted">Out</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- / ANALYTICS SECTION -->
 
     <!-- USERS SECTION -->
     <div *ngIf="adminSection === 'users'" class="container-fluid py-4 flex-grow-1">
@@ -321,9 +451,6 @@
                       <button class="btn btn-outline-primary btn-sm" (click)="viewVendorDetails(user)" title="View">
                         <i class="fas fa-eye"></i>
                       </button>
-                      <button *ngIf="!isSuperAdmin(user)" class="btn btn-outline-secondary btn-sm" (click)="openUpdateModal(user)" title="Update user">
-                        <i class="fas fa-pen"></i>
-                      </button>
                       <button *ngIf="user.vendorStatus === 'pending'" class="btn btn-success btn-sm"
                               (click)="approveVendor(user)" title="Approve">
                         <i class="fas fa-check"></i>
@@ -562,11 +689,6 @@
 
         <!-- Action Buttons based on status (dynamic label: Vendor, Distributor, SuperAdmin, etc.) -->
         <div class="mt-4">
-          <div *ngIf="!isSuperAdmin(selectedVendor)" class="d-grid gap-2 mb-2">
-            <button class="btn btn-outline-primary" (click)="openUpdateModal(selectedVendor)" title="Update user info">
-              <i class="fas fa-pen me-1"></i> Update user info
-            </button>
-          </div>
           <div *ngIf="selectedVendor.vendorStatus === 'pending'" class="d-grid gap-2">
             <button class="btn btn-success" (click)="approveVendor(selectedVendor)">
               <i class="fas fa-check me-1"></i> Approve {{ getRoleLabel(selectedVendor) }}
@@ -592,62 +714,4 @@
     </div>
   </div>
 
-  <!-- Update User Modal -->
-  <div class="modal fade" [class.show]="userToUpdate" [style.display]="userToUpdate ? 'block' : 'none'" tabindex="-1" role="dialog" aria-labelledby="updateUserModalLabel" aria-hidden="!userToUpdate">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="updateUserModalLabel">
-            <i class="fas fa-pen me-2"></i> Update user information
-          </h5>
-          <button type="button" class="btn-close" (click)="closeUpdateModal()" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" *ngIf="userToUpdate">
-          <p class="text-muted small mb-3">Editing: {{ userToUpdate.email }}</p>
-          <form #updateForm="ngForm">
-            <div class="row g-3">
-              <div class="col-12 col-sm-6">
-                <label for="updateFirstName" class="form-label">First name</label>
-                <input type="text" class="form-control" id="updateFirstName" name="firstName"
-                       [(ngModel)]="updateFirstName" placeholder="First name">
-              </div>
-              <div class="col-12 col-sm-6">
-                <label for="updateLastName" class="form-label">Last name</label>
-                <input type="text" class="form-control" id="updateLastName" name="lastName"
-                       [(ngModel)]="updateLastName" placeholder="Last name">
-              </div>
-              <div class="col-12">
-                <label for="updateCompanyName" class="form-label">Company name</label>
-                <input type="text" class="form-control" id="updateCompanyName" name="companyName"
-                       [(ngModel)]="updateCompanyName" placeholder="Company name">
-              </div>
-              <div class="col-12 col-sm-6">
-                <label for="updatePhone" class="form-label">Phone</label>
-                <input type="text" class="form-control" id="updatePhone" name="phone"
-                       [(ngModel)]="updatePhone" placeholder="Phone">
-              </div>
-              <div class="col-12 col-sm-6">
-                <label for="updateAddress" class="form-label">Address</label>
-                <input type="text" class="form-control" id="updateAddress" name="address"
-                       [(ngModel)]="updateAddress" placeholder="Address, City, Country">
-              </div>
-              <div class="col-12">
-                <label for="updateAbout" class="form-label">About</label>
-                <textarea class="form-control" id="updateAbout" name="about" rows="3"
-                          [(ngModel)]="updateAbout" placeholder="Bio or description"></textarea>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeUpdateModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" (click)="saveUpdateUser()" [disabled]="updateSaving">
-            <span *ngIf="!updateSaving"><i class="fas fa-save me-1"></i> Save changes</span>
-            <span *ngIf="updateSaving"><i class="fas fa-spinner fa-spin me-1"></i> Saving...</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-backdrop fade" [class.show]="userToUpdate" *ngIf="userToUpdate"></div>
-  </div>
 </div>

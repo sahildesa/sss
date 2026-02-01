@@ -42,7 +42,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'analytics', component: DashboardComponent },
-      { path: 'users', component: DashboardUsersComponent },
+      { path: 'users', component: DashboardUsersComponent, canActivate: [SuperAdminGuard] },
       { path: 'products', component: DashboardProductsComponent },
       { path: '', redirectTo: 'analytics', pathMatch: 'full' }
     ]

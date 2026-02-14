@@ -1,0 +1,724 @@
+<!-- Hero Section -->
+<section
+class="hero-section text-center d-flex align-items-center justify-content-center"
+[ngStyle]="{
+'background-image': 'linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(' + getBackgroundImage() + ')',
+'background-size': 'cover',
+'background-position': 'center',
+'background-repeat': 'no-repeat'
+}">
+<div class="hero-content text-white">
+<h1 class="display-4">{{ categoryName | titlecase }}</h1>
+<p class="lead">{{ categorySubtitle }}</p>
+</div>
+</section>
+
+<!-- Main Content Wrapper -->
+<div class="category-page d-flex mt-4 gap-3">
+
+<!-- Sidebar Filters (Left) -->
+<aside class="sidebar p-3 border-end" style="width:250px;">
+<h3>Filters</h3>
+
+<div class="filter-section mb-3">
+      <h4>Store reviews</h4>
+      <div class="checkbox-group">
+        <label><input type="checkbox" autocomplete="off"> 4.0 & up</label>
+        <label><input type="checkbox" autocomplete="off"> 4.5 & up</label>
+        <label><input type="checkbox" autocomplete="off"> 5.0</label>
+      </div>
+    </div>
+
+    <div class="filter-section mb-3">
+      <h4>Category</h4>
+      <select #categorySelect class="form-select" autocomplete="off" (change)="changeCategory(categorySelect.value)">
+        <option value="">Any Category</option>
+        <option *ngFor="let opt of browseOptions" [value]="opt">{{ opt }}</option>
+      </select>
+    </div>
+
+    <div class="filter-section mb-3">
+      <h4>Price</h4>
+      <input type="number" placeholder="Min." class="form-control mb-2" autocomplete="off">
+      <input type="number" placeholder="Max." class="form-control mb-2" autocomplete="off">
+      <button class="btn btn-primary btn-sm w-100">OK</button>
+    </div>
+
+    <div class="filter-section mb-3">
+      <h4>Supplier country/region</h4>
+      <div class="checkbox-group">
+        <label><input type="checkbox" autocomplete="off"> India</label>
+        <label><input type="checkbox" autocomplete="off"> China</label>
+        <label><input type="checkbox" autocomplete="off"> United States</label>
+        <label><input type="checkbox" autocomplete="off"> Germany</label>
+      </div>
+    </div>
+
+    <div class="filter-section">
+      <button class="btn btn-outline-secondary btn-sm w-100">Clear all filters</button>
+    </div>
+  </aside>
+
+<!-- Main Content -->
+ <div #mainContent class="main-content flex-grow-1">
+
+<ng-container [ngSwitch]="categoryName.toLowerCase()">
+
+<!-- Phones -->
+<section *ngSwitchCase="'phones'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+<!-- Computers -->
+<section *ngSwitchCase="'computers'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+<!-- Smartwatches -->
+<section *ngSwitchCase="'smartwatch'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+<!-- Cameras -->
+<section *ngSwitchCase="'camera'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+
+<!-- headphones -->
+<section *ngSwitchCase="'headphones'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+<!-- gaming -->
+<section *ngSwitchCase="'gaming'">
+<section class="source-by-category py-3">
+<div class="container">
+<h2 class="mb-4">Source by Company</h2>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let company of filteredCompanies">
+<div class="card h-100 text-center p-3 border-0 shadow-sm category-card"
+(click)="selectCompany(company)">
+<img [src]="company.image" [alt]="company.name" class="img-fluid mb-2" style="max-height:120px;">
+<h5>{{ company.name }}</h5>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section #productsSection *ngIf="selectedCompanyProducts.length > 0" class="company-products py-3">
+<div class="container">
+<h3 class="mb-4">{{ selectedCompany }} Products</h3>
+<div class="row g-4 justify-content-center">
+<div class="col-6 col-md-4 col-lg-3" *ngFor="let product of selectedCompanyProducts">
+<div class="card h-100 p-3 border-0 shadow-sm product-card">
+<div class="product-images mb-2">
+<img [src]="product.images[0]" class="img-fluid main-img" alt="{{ product.name }}">
+<div class="thumbnails d-flex justify-content-center mt-2 gap-1">
+<img *ngFor="let img of product.images"
+[src]="img"
+class="img-thumbnail"
+style="width:40px; height:40px; cursor:pointer; object-fit:contain;"
+alt="{{ product.name }}"
+(click)="swapImage(product, img)">
+</div>
+</div>
+<h5 class="mt-2">{{ product.name }}</h5>
+<p class="price">$ {{ product.price }}</p>
+<p class="rating">⭐ {{ product.rating }}</p>
+<p *ngIf="product.description" style="font-size:0.85rem; color:#555;">{{ product.description }}</p>
+<button class="btn btn-primary w-100" (click)="addToCart(product)">Add to Cart</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>   
+
+ <!-- Default -->
+<section *ngSwitchDefault class="category-default py-3">
+<div class="container-fluid">
+<p>No content available for this category yet.</p>
+</div>
+</section>
+</ng-container>
+</div>
+
+<!-- Right Sidebar Offers -->
+<aside class="right-sidebar p-3 border-start d-flex flex-column gap-4">
+  <h5 class="text-center mb-3">🛒 Your Cart</h5>
+
+  <!-- If the cart is empty -->
+  <div *ngIf="cart.length === 0" class="text-center text-muted my-4">
+    <p>Your Cart is Empty</p>
+  </div>
+
+  <!-- If the cart has items -->
+  <div *ngIf="cart.length > 0" class="cart-items" style="max-height:300px; overflow-y:auto;">
+    <div *ngFor="let item of cart; let i = index"
+         class="cart-item d-flex align-items-center justify-content-between border-bottom py-2">
+      <div>
+        <strong>{{ item.name }}</strong><br>
+        <small>${{ item.price }} × {{ item.quantity }}</small>
+      </div>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-sm btn-outline-secondary me-1" (click)="decreaseQuantity(i)">−</button>
+        <button class="btn btn-sm btn-outline-secondary me-1" (click)="increaseQuantity(i)">+</button>
+        <button class="btn btn-sm btn-danger" (click)="removeFromCart(i)">✕</button>
+      </div>
+    </div>
+  </div>
+  
+
+  <!-- Cart summary (only visible when items exist) -->
+  <div *ngIf="cart.length > 0" class="cart-summary mt-3 border-top pt-3 text-center">
+    <h6>Total: ${{ getCartTotal() }}</h6>
+    <button class="btn btn-success w-100 mt-2" (click)="checkout()">Checkout</button>
+    <button class="btn btn-outline-primary w-100 mt-2" (click)="openLogin()">Login</button>
+  </div>
+
+<!-- Phones -->
+<div *ngIf="categoryName.toLowerCase() === 'phones'" class="phones-offers bg-light p-3 rounded shadow-sm text-center">
+<h5>Hot Phone Deals!</h5>
+<p style="font-size:0.85rem;">Up to 80% off on latest smartphones.</p>
+<img src="assets/images/products/phonesale.jpg" alt="Phone Sale" class="img-fluid mb-2">
+<button class="btn btn-primary btn-sm w-100">Grab Offer</button>
+</div>
+
+<!-- Computers -->
+<div *ngIf="categoryName.toLowerCase() === 'computers'" class="computers-offers bg-light p-3 rounded shadow-sm">
+<h5>Upgrade Your PC!</h5>
+<p style="font-size:0.85rem;">Check out latest laptops, desktops & accessories.</p>
+<ul class="list-unstyled mb-2">
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/brands.png" alt="Laptop" width="20" height="20" class="me-2">
+    High-performance Laptops
+</li>
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/mechanical.jpg" alt="Keyboard" width="20" height="20" class="me-2">
+     Mechanical Keyboards
+</li>
+<li class="d-flex align-items-center">
+<img src="assets/images/products//mouse.jpg" alt="Gaming Mouse" width="20" height="20" class="me-2">
+      Gaming Mice
+</li>
+</ul>
+<button class="btn btn-success btn-sm w-100">Shop Computers</button>
+</div>
+
+<!-- Smartwatches -->
+<div *ngIf="categoryName.toLowerCase() === 'smartwatch'" class="smartwatch-offers bg-light p-3 rounded shadow-sm text-center">
+<h5>Track Your Health!</h5>
+<p style="font-size:0.85rem;">Fitness trackers & smartwatches with amazing discounts.</p>
+<div class="d-flex justify-content-around mb-2">
+<img src="assets/images/products/watchad1.jpg" alt="Smartwatch 1" style="width:50px;">
+<img src="assets/images//products/watchad2.jpg" alt="Smartwatch 2" style="width:50px;">
+<img src="assets/images//products/watchad3.jpg" alt="Smartwatch 3" style="width:50px;">
+</div>
+<button class="btn btn-warning btn-sm w-100">View Watches</button>
+</div>
+
+<!-- Cameras -->
+<div *ngIf="categoryName.toLowerCase() === 'camera'" class="cameras-offers bg-light p-3 rounded shadow-sm">
+<h5>Capture the Moment</h5>
+<p style="font-size:0.85rem;">Deals on DSLR & mirrorless cameras.</p>
+<ul class="list-unstyled mb-2">
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/dslr.png" alt="DSLR" width="20" height="20" class="me-2">
+DSLRs & Mirrorless
+</li>
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/lens.jpg" alt="Lens" width="20" height="20" class="me-2">
+Lenses & Accessories
+</li>
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/lighting.webp" alt="Lighting" width="20" height="20" class="me-2">
+Lighting Kits
+</li>
+</ul>
+<button class="btn btn-info btn-sm w-100">Shop Cameras</button>
+</div>
+
+<!-- Headphones -->
+<div *ngIf="categoryName.toLowerCase() === 'headphones'" class="headphones-offers bg-light p-3 rounded shadow-sm">
+<h5>Feel the Music</h5>
+<p style="font-size:0.85rem;">Top headphones & earphones deals.</p>
+<ul class="list-unstyled mb-2">
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/headphones.webp" alt="Headphones" width="20" height="20" class="me-2">
+Over-ear & In-ear
+</li>
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/noisecancelling.webp" alt="Noise Cancelling" width="20" height="20" class="me-2">
+Noise Cancelling
+</li>
+<li class="d-flex align-items-center">
+<img src="assets/images/products/wireless.png" alt="Wireless" width="20" height="20" class="me-2">
+Wireless & Wired
+</li>
+</ul>
+<button class="btn btn-secondary btn-sm w-100">Shop Headphones</button>
+</div>
+
+<!-- Gaming -->
+<div *ngIf="categoryName.toLowerCase() === 'gaming'" class="gaming-offers bg-light p-3 rounded shadow-sm">
+<h5>Level Up!</h5>
+<p style="font-size:0.85rem;">Gaming consoles, accessories & PC games.</p>
+<ul class="list-unstyled mb-2">
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/console.jpg" alt="Console" width="20" height="20" class="me-2">
+Consoles & Controllers
+</li>
+<li class="d-flex align-items-center mb-1">
+<img src="assets/images/products/mouse.jpg" alt="Gaming Mouse" width="20" height="20" class="me-2">
+Gaming Mice & Keyboards
+</li>
+<li class="d-flex align-items-center">
+<img src="assets/image/products/graphics.jpg" alt="Graphics Card" width="20" height="20" class="me-2">
+High-end Graphics Cards
+</li>
+</ul>
+<button class="btn btn-dark btn-sm w-100">Shop Gaming</button>
+</div>
+</aside>
+
+<section *ngIf="showCheckout" class="checkout-overlay py-5">
+<div class="container bg-white p-4 shadow-lg rounded" style="max-width:900px;">
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h3>Checkout</h3>
+<button class="btn btn-outline-danger btn-sm" (click)="closeSection()">✕</button>
+</div>
+
+
+<!-- Billing Info -->
+<div class="col-md-7">
+<h5>Billing Information</h5>
+<form autocomplete="off">
+<div class="mb-3">
+<label>Name</label>
+<input type="text" class="form-control" placeholder="Enter Name" />
+</div>
+<div class="mb-3">
+<label>Email</label>
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" />
+</div>
+<div class="mb-3">
+<label>Address</label>
+<input type="text" class="form-control" placeholder="Place Your Shipping Address" />
+</div>
+<div class="row">
+<div class="col-md-6 mb-3">
+<label>City</label>
+<input type="text" class="form-control" placeholder="City" />
+</div>
+<div class="col-md-6 mb-3">
+<label>Postal Code</label>
+<input type="text" class="form-control" placeholder="" />
+</div>
+</div>
+</form>
+
+<h5 class="mt-4">Select Payment Method</h5>
+
+<div class="mb-3">
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="paymentMethod"
+      id="creditCard"
+      value="creditCard"
+      [(ngModel)]="selectedPaymentMethod"
+    />
+    <label class="form-check-label" for="creditCard">
+      Credit / Debit Card
+    </label>
+  </div>
+
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="paymentMethod"
+      id="upi"
+      value="upi"
+      [(ngModel)]="selectedPaymentMethod"
+    />
+    <label class="form-check-label" for="upi">UPI</label>
+  </div>
+
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="paymentMethod"
+      id="netBanking"
+      value="netBanking"
+      [(ngModel)]="selectedPaymentMethod"
+    />
+    <label class="form-check-label" for="netBanking">Net Banking</label>
+  </div>
+
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="paymentMethod"
+      id="cod"
+      value="cod"
+      [(ngModel)]="selectedPaymentMethod"
+    />
+    <label class="form-check-label" for="cod">Cash on Delivery</label>
+  </div>
+</div>
+
+<!-- CARD DETAILS FORM -->
+<div *ngIf="selectedPaymentMethod === 'creditCard'">
+  <h5 class="mt-4">Payment Details</h5>
+  <form autocomplete="off">
+    <div class="mb-3">
+      <label>Card Number</label>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="1234 5678 9012 3456"
+      />
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Expiry</label>
+        <input type="text" class="form-control" placeholder="MM/YY" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>CVV</label>
+        <input type="password" class="form-control" autocomplete="off" placeholder="123" />
+      </div>
+    </div>
+  </form>
+</div>
+
+<!-- UPI DETAILS -->
+<div *ngIf="selectedPaymentMethod === 'upi'">
+  <h5 class="mt-4">Enter UPI ID</h5>
+  <input
+    type="text"
+    class="form-control"
+    placeholder="e.g. username@upi"
+  />
+</div>
+
+<!-- NET BANKING DETAILS -->
+<div *ngIf="selectedPaymentMethod === 'netBanking'">
+  <h5 class="mt-4">Select Your Bank</h5>
+  <select class="form-select" autocomplete="off">
+    <option selected disabled>Select Bank</option>
+    <option value="sbi">State Bank of India</option>
+    <option value="hdfc">HDFC Bank</option>
+    <option value="icici">ICICI Bank</option>
+    <option value="axis">Axis Bank</option>
+    <option value="kotak">Kotak Mahindra Bank</option>
+  </select>
+</div>
+
+<!-- CASH ON DELIVERY -->
+<div *ngIf="selectedPaymentMethod === 'cod'">
+  <h5 class="mt-4">Cash on Delivery</h5>
+  <p>You can pay with cash when your order is delivered.</p>
+</div>
+
+
+<!-- Summary -->
+<div class="col-md-5 mt-5">
+<div class="card p-3 shadow-sm">
+<h5>Order Summary</h5>
+<div *ngFor="let item of cart" class="d-flex justify-content-between border-bottom py-2">
+<span>{{ item.name }} × {{ item.quantity }}</span>
+<span>${{ item.price * item.quantity }}</span>
+</div>
+<div class="d-flex justify-content-between fw-bold mt-3">
+<span>Total:</span>
+<span>${{ getCartTotal() }}</span>
+</div>
+<button class="btn btn-success w-100 mt-3">Place Order</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ✅ LOGIN OVERLAY -->
+<div *ngIf="showLogin" class="login-overlay">
+<div class="container bg-white p-4 shadow-lg rounded" style="max-width:500px;">
+<div class="d-flex justify-content-between align-items-center mb-4">
+<h3>Login</h3>
+<button class="btn btn-outline-danger btn-sm" (click)="closeSection()">✕</button>
+</div>
+<form autocomplete="off">
+<div class="mb-3">
+<label>Email Address</label>
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" />
+</div>
+<div class="mb-3">
+<label>Password</label>
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" />
+</div>
+<div class="d-flex justify-content-between align-items-center mb-3">
+<div>
+<input type="checkbox" id="remember" autocomplete="off" />
+<label for="remember">Remember me</label>
+</div>
+<a href="#" class="text-decoration-none">Forgot password?</a>
+</div>
+<button type="submit" class="btn btn-primary w-100">Login</button>
+</form>
+<div class="text-center mt-3">
+<p>
+  Don’t have an account?
+<a href="#" class="text-decoration-none" (click)="openSignup(); $event.preventDefault()">Sign Up</a>
+</p>
+</div>
+</div>
+</div>
+
+<!-- ✅ SIGN UP MODAL -->
+<div *ngIf="showSignup" class="signup-overlay">
+<div class="container bg-white p-4 shadow-lg rounded" style="max-width:500px;">
+<div class="d-flex justify-content-between align-items-center mb-3">
+<h3 class="m-0">Create Account</h3>
+<button class="btn btn-outline-danger btn-sm" (click)="closeSection()">✕</button>
+</div>
+<form (submit)="onSignupSubmit($event)" autocomplete="off">
+<div class="mb-3">
+<label>Full Name</label>
+<input type="text" class="form-control" placeholder="Enter Name" required />
+</div>
+<div class="mb-3">
+<label>Email Address</label>
+<input type="email" class="form-control" autocomplete="off" placeholder="you@example.com" required />
+</div>
+<div class="mb-3">
+<label>Password</label>
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" required minlength="6" />
+</div>
+<div class="mb-3">
+<label>Confirm Password</label>
+<input type="password" class="form-control" autocomplete="off" placeholder="••••••••" required minlength="6" />
+</div>
+<button type="submit" class="btn btn-success w-100 mt-2">Sign Up</button>
+</form>
+
+<div class="text-center mt-3">
+<p>
+Already have an account?
+<a href="#" class="text-decoration-none" (click)="openLogin(); $event.preventDefault()">Login</a>
+</p>
+</div>
+</div>
+</div>

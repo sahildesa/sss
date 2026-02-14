@@ -1,0 +1,308 @@
+/* VARIABLES */
+
+$primary: #4f46e5;
+$secondary: #06b6d4;
+$danger: #fb7185;
+$bg-dark: #020617;
+$text-light: #ffffff;
+$text-muted: rgba(255,255,255,0.6);
+
+/* FIX SELECT & OPTIONS COLOR */
+
+/* CLICKABLE AUTH LINKS */
+
+.auth-link {
+  color: #22d3ee;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: 0.3s;
+}
+
+.auth-link:hover {
+  color: #67e8f9;
+}
+/* =====================================
+   CUSTOM AUTH BUTTON
+===================================== */
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover */
+.auth-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 0 12px rgba(79,70,229,0.7),
+    0 12px 35px rgba(6,182,212,0.6);
+}
+
+/* Click */
+.auth-btn:active {
+  transform: scale(0.97);
+}
+
+/* Shine Effect */
+.auth-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: -120%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.auth-btn:hover::after {
+  left: 120%;
+}
+
+/* Disabled */
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+
+.premium-auth {
+
+  select.form-control {
+    color: #ffffff;
+    background-color: rgba(255,255,255,0.08);
+  }
+
+  /* Dropdown list */
+  select.form-control option {
+    background-color: #a9a9a9;
+    color: #000000;
+  }
+
+  /* Disabled placeholder option */
+  select.form-control option[disabled] {
+    color: rgba(255,255,255,0.5);
+  }
+}
+
+.premium-auth {
+ min-height: 100svh;
+  min-height: 100vh;
+  padding: 0;
+  background: radial-gradient(circle at top left, #1e293b, $bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    background: linear-gradient(135deg, $primary, $secondary);
+    filter: blur(160px);
+    opacity: 0.45;
+  }
+
+  &::before {
+    top: -120px;
+    left: -120px;
+  }
+
+  &::after {
+    bottom: -120px;
+    right: -120px;
+  }
+
+  /* CARD */
+
+  .minimal-card {
+    width: 100%;
+    max-width: 480px;
+    background: rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    padding: 3rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+    animation: fadeUp 0.7s ease;
+
+    /* Header */
+    h2 {
+      color: $text-light;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 2rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ========================================
+       FORMS
+    ======================================== */
+
+    form {
+
+      .mb-3 {
+        margin-bottom: 1.2rem;
+      }
+
+      /* Inputs & Selects */
+      .form-control,
+      textarea,
+      select {
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.25);
+        color: $text-light;
+        padding: 12px 18px;
+        transition: all 0.3s ease;
+
+        &::placeholder {
+          color: $text-muted;
+        }
+
+        &:focus {
+          background: rgba(255,255,255,0.12);
+          border-color: $primary;
+          box-shadow: 0 0 0 2px rgba(79,70,229,0.35);
+          outline: none;
+        }
+      }
+
+      .rounded-pill {
+        border-radius: 50px;
+      }
+
+      textarea.rounded-3 {
+        border-radius: 12px;
+      }
+
+      /* Errors */
+      .text-danger {
+        color: $danger !important;
+        font-size: 0.8rem;
+        margin-top: 4px;
+      }
+
+      /* Checkbox */
+      .form-check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        input {
+          background: transparent;
+          border: 1px solid #aaa;
+        }
+
+        input:checked {
+          background: $primary;
+          border-color: $primary;
+        }
+
+        label {
+          color: $text-muted;
+
+          a {
+            color: $secondary;
+          }
+        }
+      }
+
+/*  FORCE BUTTON HOVER (GLOBAL INSIDE AUTH) */
+/* ============================================
+   FORCE BOOTSTRAP BUTTON HOVER OVERRIDE
+============================================ */
+
+.premium-auth .minimal-card form button.btn.btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s ease !important;
+}
+
+/* HOVER */
+.premium-auth .minimal-card form button.btn.btn-primary:hover {
+  background: linear-gradient(135deg, #6366f1, #22d3ee);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow:
+    0 0 12px rgba(79,70,229,0.7),
+    0 12px 40px rgba(6,182,212,0.6);
+}
+
+/* CLICK */
+.premium-auth .minimal-card form button.btn.btn-primary:active {
+  transform: scale(0.97);
+  box-shadow:
+    0 0 8px rgba(79,70,229,0.5);
+}
+
+/* SHINE EFFECT */
+.premium-auth .minimal-card form button.btn.btn-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: -120%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transition: 0.6s;
+}
+
+.premium-auth .minimal-card form button.btn.btn-primary:hover::after {
+  left: 120%;
+}
+
+
+/* ANIMATION */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 576px) {
+  .premium-auth {
+    .minimal-card {
+      padding: 2rem;
+
+    }
+  }
+}
+    }
+  }
+}

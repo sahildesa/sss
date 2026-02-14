@@ -1,0 +1,73 @@
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <h4 class="fw-bold">Management Product</h4>
+        <!--<a routerLink="/product-management" class="btn btn-outline-dark btn-sm">
+            ← Back to Management
+          </a>-->
+        <p class="text-muted mb-0">Add your product to your store</p>
+      </div>
+      <button class="btn btn-dark">Add Product</button>
+    </div>
+  
+    <!-- Filters -->
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <button class="btn btn-outline-secondary btn-sm">All</button>
+      <button class="btn btn-outline-secondary btn-sm">Active</button>
+      <button class="btn btn-outline-secondary btn-sm">Non-Active</button>
+    </div>
+  
+    <!-- View Controls -->
+    <div class="d-flex flex-wrap gap-2 mb-4 justify-content-end">
+      <!-- Redirect to Product Management Page -->
+      <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/products']">
+        Table
+      </button>      
+      <button class="btn btn-outline-secondary btn-sm">Columns</button>
+      <button class="btn btn-outline-secondary btn-sm">Filter</button>
+      <input class="form-control form-control-sm w-auto" placeholder="Search" />
+    </div>
+  
+    <!-- Product Cards -->
+    <div class="row g-4">
+      <div class="col-md-3" *ngFor="let product of products">
+        <div class="card product-card h-100 position-relative">
+          <!-- Badge -->
+          <div *ngIf="product.badge" class="badge bg-warning position-absolute top-0 start-0 rounded-0">
+            🏆 {{ product.badge }}
+          </div>
+  
+          <!-- Product Image -->
+          <img [src]="product.image" class="card-img-top p-3" [alt]="product.name" />
+  
+          <!-- Card Body -->
+          <div class="card-body">
+            <h6 class="fw-bold">{{ product.name }}</h6>
+            <p class="text-muted small mb-2">{{ product.description }}</p>
+  
+            <div class="d-flex align-items-center justify-content-between mb-2">
+              <strong>{{ product.price }}</strong>
+              <span class="badge bg-light text-dark">{{ product.discount }}</span>
+            </div>
+  
+            <div class="text-muted small mb-2">
+              <i class="bi bi-truck"></i> Free shipping
+              <i class="bi bi-gift ms-3"></i> Free gift
+            </div>
+  
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-between align-items-center">
+              <!-- ✅ routerLink fixed below -->
+              <a [routerLink]="['/admin/product-details', product.id]" class="btn btn-primary btn-sm">
+                View Deal <i class="bi bi-arrow-up-right ms-1"></i>
+              </a>
+              <button class="btn btn-light btn-sm">
+                <i class="bi bi-heart"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

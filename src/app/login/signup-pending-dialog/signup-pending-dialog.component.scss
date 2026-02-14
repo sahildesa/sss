@@ -1,0 +1,21 @@
+.signup-pending-dialog {
+  min-width: 320px;
+  max-width: 420px;
+
+  h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    color: #444;
+    line-height: 1.5;
+  }
+
+  mat-dialog-actions {
+    padding-top: 1rem;
+    margin-bottom: 0;
+  }
+}

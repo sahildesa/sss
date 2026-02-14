@@ -1,0 +1,681 @@
+<!-- Banner Carousel 1-->
+<div #topSection>
+  <div class="row justify-content-center p-0">
+    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="500">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div *ngFor="let image of images; let i = index" [ngClass]="{'carousel-item': true, 'active': i === 0}">
+          <img [src]="image" class="carousel-img d-block w-100" alt="Slide {{ i + 1 }}">
+          <!-- <button class="contact-us-btn btn btn-primary" (click)="contactUs()">Contact Us</button> -->
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Making of Coinzee 2-->
+<div class="making-of-section bg-white py-4 section-bg" #makingSection>
+  <div class="row">
+    <div class="col-2 d-none d-md-block"></div>
+    <div class="col-12 col-md-8 text-center">
+      <h1 class="coinzee-heading">
+        <div>Let’s see </div>
+        <h1 class="coinzee-heading text-center">
+          <span>making of <span class="highlight-text">Coinzee</span> 
+        </span>
+        </h1>
+      </h1>
+    </div>
+    <div class="col-2 d-none d-md-block"></div>
+  </div>
+
+  <div class="container video-feature-section">
+    <div class="row">
+      <div class="col-12 col-lg-1 d-none d-lg-block"></div>
+      <div class="col-12 col-lg-10">
+        <div class="row align-items-start">
+          <div class="col-12 col-md-8 position-relative mb-4 mb-md-0">
+            <div class="position-absolute top-0 end-0 z-0"></div>
+            <div class="video-wrapper position-relative z-1">
+              <video
+                #videoPlayer
+                controls
+                (loadedmetadata)="initDuration()"
+                (timeupdate)="updateTime()"
+                [src]="'assets/videos/video.mp4'"
+                class="video-el rounded w-100 img-fluid"
+              ></video>
+            </div>
+
+            <img src="assets/images/Ellipse 204.png"alt="Badge"class="badge-img position-absolute"/>
+          </div>
+
+          <div class="col-12 col-md-4 d-flex flex-column justify-content-start p-3">
+            <p class="feature-description">
+              <span class="line">Discover trending</span>
+              <span class="line"><strong>Coinzee coolers</strong> —</span>
+              <span class="line">bold designs,</span>
+              <span class="line">seasonal hits, and</span>
+              <span class="line">customer favorites all</span>
+              <span class="line">in one place!</span>
+            </p>
+            <!-- <button class="btn btn-primary explore-btn">Explore more</button> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-1 d-none d-lg-block"></div>
+    </div>
+  </div>
+</div>
+
+<!-- crafted  3 -->
+<div class="crafted-section" #featuresSection>
+ <div class="container py-5">
+    <div class="pb-4">
+      <h2
+        class="fw-bold px-3 px-md-0 text-break
+              text-start text-lg-center
+              fs-4 fs-sm-3 fs-md-2 fs-lg-1"
+        #navbar3d>
+        Crafted to Impress,
+        <span class="d-block d-lg-inline">
+          <span class="text-warning">Designed to Represent.</span>
+        </span>
+      </h2>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="row">
+          <ng-container *ngFor="let feature of features1; let i = index">
+            <div class="col-12 col-md-6 col-lg-3 mb-4">
+              <div class="feature-box text-lg-center text-start border-left-white"(click)="onFeatureClick(feature.title)">
+                <i [class]="feature.icon + ' fa-2x mb-2 ' + feature.colorClass"></i>
+                <h6 class="fw-bold">{{ feature.title }}</h6>
+                <p class="feature-text">{{ feature.description }}</p>
+              </div>
+            </div>
+
+            <!-- Horizontal line after every 4 features on larger screens -->
+            <div class="col-12 d-none d-lg-block" *ngIf="(i + 1) % 4 === 0 && i !== features1.length - 1">
+              <hr class="white-divider" />
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="col-lg-4 px-2 px-lg-0">
+        <div id="autoImageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" >
+          <div class="carousel-indicators custom-indicators align-items-center text-center">
+            <button
+              *ngFor="let img of heroImages; let i = index"
+              type="button"
+              data-bs-target="#autoImageCarousel"
+              [attr.data-bs-slide-to]="i"
+              [class.active]="i === 0"
+              [attr.aria-current]="i === 0 ? 'true' : null"
+              [attr.aria-label]="'Slide ' + (i + 1)"
+            ></button>
+          </div>
+
+          <div class="carousel-inner">
+            <div *ngFor="let img of heroImages; let i = index" class="carousel-item"[class.active]="i === 0">
+              <img width="350"height="250"[src]="img"class=" d-block carousel-products rounded"alt="Product Image"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Mold Creation Section 4 -->
+<div class="container-fluid py-5 bg-dark text-white" #moldSection>
+  <div class="row justify-content-center g-4 px-3">
+
+    <!-- Image 1: Always First -->
+    <div class="col-12 col-lg-5 text-start text-lg-center order-1 order-lg-1 m-0">
+      <div class="d-block d-lg-none">
+        <img 
+          #mainMoldImage 
+          src="../../../assets/images/mold creation.jpeg" 
+          alt="Mold Image" 
+          class="rounded shadow img-fluid"
+          style="object-fit: cover; max-height: 250px;"
+        >
+      </div>
+
+      <div class="d-none d-lg-block pt-5" style="width: 100%;">
+        <img 
+          #mainMoldImage 
+          src="../../../assets/images/mold creation.jpeg" 
+          alt="Mold Image" 
+          class="rounded shadow img-fluid"
+          style="object-fit: cover; max-height: 250px;"
+        >
+      </div>
+    </div>
+
+    <!-- Text Column: Always Second -->
+    <div class="col-12 col-lg-5 order-2 order-lg-2 p-0">
+      <h3 class="fw-bold text-start text-lg-center mb-3" #navbar3d>
+        <span class="text-white">Mold</span>
+        <span class="text-danger px-2">Creation</span>
+      </h3>
+
+      <!-- For small screens: max-width 350px -->
+      <div class="d-block d-lg-none" style="max-width: 350px;">
+        <p class="text-start lh-lg fs-6 fs-md-5">
+          With the precision mold ready, the next phase brings the coin to life — the infusion of molten Cadmium metal.
+          Metal is heated to extreme temperatures, turning it into a glowing molten form.
+        </p>
+        <p class="text-start lh-lg fs-6 fs-md-5">
+          The molten metal is carefully poured into the precision mold, flowing into every fine detail. This phase lays the
+          structural foundation of the coin, turning concept into tangible reality.
+        </p>
+        <p class="text-start lh-lg fs-6 fs-md-5 mb-4">
+          The process captures the 3D design and textures from the mold with accuracy and depth.
+        </p>
+      </div>
+
+      <!-- For large screens: max-width 550px -->
+      <div class="d-none d-lg-block mx-auto" style="max-width: 550px;">
+        <p class="text-start lh-lg fs-6 fs-md-5">
+          With the precision mold ready, the next phase brings the coin to life — the infusion of molten Cadmium metal.
+          Metal is heated to extreme temperatures, turning it into a glowing molten form.
+        </p>
+        <p class="text-start lh-lg fs-6 fs-md-5">
+          The molten metal is carefully poured into the precision mold, flowing into every fine detail. This phase lays the
+          structural foundation of the coin, turning concept into tangible reality.
+        </p>
+        <p class="text-start lh-lg fs-6 fs-md-5 mb-4">
+          The process captures the 3D design and textures from the mold with accuracy and depth.
+        </p>
+      </div>
+    </div>
+
+    <!-- Image 2: Should appear last on small/tablet, but beside text on large -->
+    <div class="col-12 col-lg-10  text-start text-lg-center order-3 order-lg-3 p-0 m-0">
+      <img  #additionalMoldImage  src="assets/images/erasebg-transformed (1).png" alt="Additional Mold Detail" class="rounded " style="object-fit: contain; max-height: 200px;">  
+    </div>
+  </div>
+</div>
+
+<!-- Coin Crafting Process Section 5 -->
+<div class="container-fluid pt-5 pb-5 coin-process-section" #craftedSection>
+  <h3 class="text-start text-md-center mb-5 coin-process-title break-words whitespace-normal">
+    The Craft Behind CoinZee: <span class="text-highlight">From Metal to Masterpiece.</span>
+  </h3>
+
+  <div class="container hero-content">
+    <div class="row align-items-start mb-5">
+      <div class="col-12 col-md-5 offset-md-1 text-center position-relative mb-4 mb-md-0">
+        <div class="process-box">
+          <img src="assets/images/pour-metal.jpg" alt="Pouring" class="img-fluid rounded">
+          <h6 class="mt-2 fw-semibold">Pouring the Metal</h6>
+          <p class="process-description">
+            Cadmium metal is heated to high temperatures. <br>
+            Glowing molten metal is poured into precision molds,<br>
+            as it flows into intricate design details with accuracy.
+          </p>
+        </div>
+        <img src="assets/images/Ellipse 206.png" alt="Ellipse" class="ellipse-img ellipse-left">
+      </div>
+
+      <div class="d-none d-md-block col-md-1"></div>
+    </div>
+
+    <div class="row align-items-start mb-5 justify-content-end">
+      <div class="d-none d-md-block col-md-1"></div>
+
+      <div class="d-none d-md-block col-md-1 text-center">
+        <img src="assets/images/arrow1.png" alt="Arrow" class="arrow arrow-1">
+      </div>
+
+      <div class="col-12 col-md-5 text-center position-relative mb-4 mb-md-0">
+        <div class="process-box">
+          <img src="assets/images/embryo-metal.jpg" alt="Embryo" class="img-fluid rounded">
+          <h6 class="mt-2 fw-semibold">Metal Embryo Formation</h6>
+          <p class="process-description">
+            Molten metal cools and solidifies.<br>
+            This forms the coin's 3D base — the “metal embryo”.<br>
+            Captures all textures and depth from the mold.
+          </p>
+        </div>
+        <img src="assets/images/Ellipse 205.png" alt="Ellipse" class="ellipse-img ellipse-right">
+      </div>
+    </div>
+
+    <img src="assets/images/arrow2.png" alt="Arrow" class="arrow arrow-2 d-none d-md-block mx-auto d-block">
+
+    <div class="row align-items-start mt-5">
+      <div class="col-12 col-md-5 offset-md-1 text-center position-relative">
+        <div class="process-box">
+          <img src="assets/images/polish.jpg" alt="Polishing" class="img-fluid rounded">
+          <h6 class="mt-2 fw-semibold">Polishing & Plating</h6>
+          <p class="process-description">
+            Raw coin is polished to enhance surface finish.<br>
+            Coating is applied (gold, silver, etc.) for shine and durability,<br>
+            and preps the coin for final coloring and assembly.
+          </p>
+        </div>
+        <img src="assets/images/Ellipse 207.png" alt="Ellipse" class="ellipse-img ellipse-left">
+      </div>
+
+      <div class="d-none d-md-block col-md-1"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Products Section -->
+<div class="container-fluid bg-light products-section p-0 py-5 m-0" #productSection>
+  <div class="container">
+    <!-- Heading -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-start text-lg-center px-3">
+        <h2 class="fw-bold product-title">
+          <span class="text-dark">Our</span>
+          <span class="text-primary px-3">Products</span>
+        </h2>
+      </div>
+    </div>
+
+    <!-- Category Filter Buttons (Inline View More) -->
+    <div class="row justify-content-center mb-4 category-filter px-3">
+      <div class="col-sm-12 text-start text-lg-center p-0">
+        <div class="d-flex flex-wrap gap-2">
+          <ng-container *ngFor="let cat of visibleCategories">
+            <button
+              class="btn btn-outline-secondary rounded-pill px-3 py-1 fw-semibold"
+              [ngClass]="{ 'btn-primary text-white': cat === activeCategory || hoveredCategory === cat }"
+              (click)="setCategory(cat)"
+              (mouseover)="hoveredCategory = cat"
+              (mouseout)="hoveredCategory = null"
+            >
+              {{ cat }}
+            </button>
+          </ng-container>
+
+          <!-- Inline View More / View Less for Categories -->
+          <button
+            *ngIf="categories.length > categoryLimit"
+            class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold"
+            (click)="toggleCategoryView()"
+          >
+            {{ showAllCategories ? 'View Less' : 'View More' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Grid (Inline View More) -->
+    <div class="g-4 products-grid">
+      <div class="row col-sm-12 justify-content-around">
+        <ng-container *ngFor="let product of visibleProducts">
+          <div class="col-5 col-lg-4 m-0 p-0" (click)="openProductModel(product)">
+            <div class="card h-100 border-0 shadow-sm text-center p-3 pr-0 ml-0">
+              <img
+                [src]="product.image"
+                [alt]="product.name"
+                class="img-fluid mb-3"
+                style="max-height: 200px; object-fit: contain;"
+              />
+
+              <!-- <div class="mb-2">
+                <button class="btn btn-sm btn-outline-dark" aria-label="Share">
+                  <i class="fa fa-share-alt-square"></i>
+                </button>
+              </div> -->
+
+              <button
+                class="btn btn-link fw-semibold text-decoration-none mt-2">
+                {{ product.name }}
+                <i class="bi bi-chevron-right ms-1"></i>
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- Inline View More / View Less for Products -->
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngIf="products.length > productLimit">
+        <div class="d-flex align-items-center justify-content-center h-100">
+          <button
+            class="btn btn-outline-primary rounded-pill px-3 py-1 fw-semibold"
+            (click)="toggleProductView()"
+          >
+            {{ showAllProducts ? 'View Less' : 'View More' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bookings  -->
+<div class="cta-section container-fluid py-4">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-9">
+        <div class="cta-box p-4">
+          <div class="row align-items-center">
+            <!-- Text Column -->
+            <div class="col-12 col-md-8 text-center text-md-start mb-3 mb-md-0">
+              <h5 class="text-white fw-semibold mb-0">
+                Let’s Clear Your Doubts – Schedule a Call Today!
+              </h5>
+            </div>
+
+            <!-- Button Column -->
+            <div class="col-12 col-md-4 text-center text-md-end">
+              <button class="btn cta-btn" data-bs-toggle="modal" data-bs-target="#bookingModal">
+                Book Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Personalize your coinzee -->
+<div class="row align-items-center text-center" style="background: linear-gradient(to right, #fff, #fff7e6);" #personalizeSection>
+  <div class="row p-4 flex-lg-row flex-column" style="background-color: #9c611e; position: relative; width: 100%;">
+
+    <!-- Text Column -->
+    <div class="col-12 col-sm-6 col-lg-6 text-center text-lg-start px-3 px-lg-5 d-flex flex-column justify-content-center">
+      <h2 class="fw-bold text-white fs-2 fs-lg-1">Personalize Your Coinzee</h2>
+      <p class="fw-semibold text-dark fs-6 fs-lg-5 mb-2">Bring Your Brand to Life</p>
+      <p class="text-dark fs-6 fs-lg-5 mb-4">
+        Upload your logo and see how Coinzee transforms it into a<br class="d-none d-lg-block">
+        signature metallic medallion on your custom cooler.<br class="d-none d-lg-block">
+        Make your mark — with style, precision, and shine.
+      </p>
+      <button (click)="showEnquiryForm = true"
+              class="btn"
+              style="background-color: #5c0a14; color: white; padding: 10px 20px; border: none; border-radius: 6px;">
+        Personalize Your Coinzee
+      </button>
+    </div>
+
+    <!-- Image Column: Only visible on lg and above -->
+    <div class="col-12 col-lg-6 d-none d-lg-flex justify-content-end align-items-center mt-4 mt-lg-0">
+      <img src="assets/images/swirl-bg.png"
+           alt="Swirl Background"
+           class="img-fluid"
+           style="max-height: 100%; max-width: 100%;">
+    </div>
+
+  </div>
+</div>
+
+<!-- Client Testimonals -->
+<div class="container-fluid px-4 py-5" style="background: linear-gradient(to right, #2c2c2c, #7c0000); font-family: sans-serif;" id="clientSection">
+  <div class="row align-items-center justify-content-center">
+
+    <!-- Carousel section (first on mobile) -->
+    <div class="col-12 col-md-8">
+      <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" style="border-radius: 12px;">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="d-flex align-items-center bg" style="background-color: #7e5b8c; padding: 40px 30px; border-radius: 12px; color: white; flex-wrap: wrap;">
+              <div class="flex-fill text-start">
+                <div>
+                  Musicians like Jason use Setapp to push the<br>
+                  limits of their creativity, dancing through tasks<br>
+                  for more time to play.
+                </div>
+                <div class="pt-4">Jason Staczek</div>
+                <button style="margin-top: 30px; border: none; background: white; width: 40px; height: 40px; border-radius: 50%;">
+                  <i class="fa fa-play" style="color: black;"></i>
+                </button>
+              </div>
+
+              <div class="flex-shrink-0 ms-4">
+                <img src="assets/images/image 67.png" alt="Jason" style="height: 500px; border-radius: 10px; max-width: 100%;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="carousel-indicators" style="bottom: -30px;">
+          <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active bg-white" aria-current="true" style="width: 10px; height: 10px; border-radius: 50%;"></button>
+          <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" class="bg-white" style="width: 10px; height: 10px; border-radius: 50%;"></button>
+          <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" class="bg-white" style="width: 10px; height: 10px; border-radius: 50%;"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heading section (second on mobile) -->
+    <div class="col-12 col-md-4 text-white text-md-start text-center mt-4 mt-md-0">
+      <h1 style="font-weight: bold; color: #fff;">
+        What our<br>
+        Clients are <br>
+        <span style="color: #fff;">saying</span> <span style="color: white;"> about us!</span>
+      </h1>
+    </div>
+  </div>
+</div>
+
+<!-- Centered Coinzee Image Section -->
+<div class="footer-banner-section" #bannerSection>
+  <img src="../../../assets/images/Header Image 1.png" alt="Coinzee Products"/>
+</div>
+
+<!-- POPUP OVERLAY -->
+<!-- Modal Wrapper -->
+<div *ngIf="showEnquiryForm" class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content rounded-4 shadow-lg border-0">
+      <div class="modal-body position-relative p-2 p-sm-3">
+
+        <button type="button" class="btn-close position-absolute" style="top: 15px; right: 20px;" (click)="showEnquiryForm = false"></button>
+
+        <div *ngIf="currentStep === 1" class="container-fluid d-flex justify-content-center bg-light px-0">
+          <div class="row flex-grow-1 w-100 m-0 shadow rounded-0">
+
+            <div class="col-12 col-md-6 order-1 order-md-0 p-0">
+              <div class="position-relative h-100" style="min-height: 300px;">
+                <img src="../../../assets/images/hand-drawn-flat-design-b2b-illustration.png" alt="Branding" class="img-fluid h-100 w-100 object-fit-cover" />
+              </div>
+            </div>
+
+            <div class="col-12 col-md-6 order-0 order-md-1 bg-white">
+              <form *ngIf="currentStep === 1" [formGroup]="enquiryForm" novalidate autocomplete="off">
+                <h4 class="fw-bold mb-4 text-center">Enquiry Form</h4>
+                <div class="row g-3">
+
+                  <div class="col-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control rounded-3" id="fullName" formControlName="fullName" placeholder="Full Name" autocomplete="off"
+                        [ngClass]="{ 'is-invalid': isInvalid('fullName') }" />
+                      <label for="fullName">Full Name</label>
+                      <div *ngIf="isInvalid('fullName')" class="invalid-feedback">Please fill your full name</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-floating">
+                      <input type="email" class="form-control rounded-3" id="email" formControlName="email" placeholder="Email"
+                        [ngClass]="{ 'is-invalid': isInvalid('email') }" />
+                      <label for="email">Email Address</label>
+                      <div *ngIf="isInvalid('email')" class="invalid-feedback">Please enter a valid email</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label small text-muted mb-1">Phone Number</label>
+                    <div class="input-group">
+                      <select
+                        class="form-select rounded-start-3"
+                        formControlName="countryCode"
+                        autocomplete="off"
+                        style="max-width: 120px;"
+                        [ngClass]="{ 'is-invalid': isInvalid('countryCode') }"
+                      >
+                        <option value="">Code</option>
+                        <option *ngFor="let c of countryCodes" [value]="c.phoneCode">
+                          {{ c.cca2 }} {{ c.phoneCode }}
+                        </option>
+                      </select>
+
+                      <input
+                        type="text"
+                        class="form-control rounded-end-3"
+                        formControlName="phone"
+                        placeholder="Phone Number"
+                        [ngClass]="{ 'is-invalid': isInvalid('phone') }"
+                      />
+                    </div>
+
+                    <div *ngIf="isInvalid('countryCode')" class="text-danger small mt-1">
+                      Please select your country code
+                    </div>
+                    <div *ngIf="isInvalid('phone')" class="text-danger small mt-1">
+                      Please enter your phone number
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control rounded-3" id="company" formControlName="company" placeholder="Company" autocomplete="off"
+                        [ngClass]="{ 'is-invalid': isInvalid('company') }" />
+                      <label for="company">Company Name</label>
+                      <div *ngIf="isInvalid('company')" class="invalid-feedback">Please enter your company name</div>
+                    </div>
+                  </div>
+
+                  <div class="col-12">
+                    <div class="form-floating">
+                      <input type="text" class="form-control rounded-3" id="address" formControlName="address" placeholder="Address" autocomplete="off"
+                        [ngClass]="{ 'is-invalid': isInvalid('address') }" />
+                      <label for="address">Address</label>
+                      <div *ngIf="isInvalid('address')" class="invalid-feedback">Please enter your address</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center pt-4">
+                  <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mb-2" (click)="showEnquiryForm = false">
+                    Cancel
+                  </button>
+                  <button type="button" class="btn btn-primary rounded-pill px-4 mb-2 " (click)="onNextStep()">
+                    Next
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <div *ngIf="currentStep === 2" class="text-center">
+          <h5 class="fw-bold mb-2">Upload Your Image</h5>
+
+          <div class="upload-box card shadow-sm p-2 mx-auto mb-3" style="border: 2px dashed #d0d7de; max-width: 450px; cursor: pointer;">
+            <div class="d-flex flex-column align-items-center justify-content-center">
+              <div class="bg-primary bg-opacity-10 rounded-circle p-2 mb-2">
+                <i class="fa fa-cloud-upload-alt fs-4 text-primary"></i>
+              </div>
+              <p class="mb-1 fw-medium small">Click to upload or drag & drop</p>
+              <p class="small text-muted mb-0">.jpg,jpeg,png,svg supported</p>
+            </div>
+            <input type="file" (change)="onFileSelected($event)" accept=".jpg,.jpeg,.png,.svg" autocomplete="off"
+              class="form-control position-absolute top-0 start-0 w-100 h-100 opacity-0" />
+          </div>
+
+          <div *ngIf="uploadedFiles.length > 0" class="card shadow-sm border-0 rounded-4 p-3 mx-auto text-center" style="max-width: 200px;">
+            <h6 class="text-primary fw-semibold">Preview</h6>
+            <img *ngIf="previewUrl" [src]="previewUrl" alt="Image preview" style="max-width: 200px; margin-top:10px;">
+            <div class="">
+              <app-button3dviewer [imageUrl]="uploadedFiles[0]"></app-button3dviewer>
+            </div>
+            <button class="btn btn-sm btn-outline-danger" (click)="uploadedFiles = []">
+              <i class="fa fa-trash-alt me-1"></i> Remove
+            </button>
+          </div>
+
+          <div class="mt-3 d-flex justify-content-between">
+            <button class="btn btn-outline-secondary" (click)="currentStep = 1">Back</button>
+            <button class="btn btn-primary"  [disabled]="uploadedFiles.length === 0" (click)="goToMockupPage()">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showTrademarkPopup" class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.6); z-index: 1050;">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Trademark Certificate</h5>
+        <button type="button" class="btn-close" (click)="closeTrademarkPopup()"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="assets/images/Coinzee Trademark Certificate_page-0001.jpg" alt="Page 1" class="img-fluid mb-3" />
+        <img src="assets/images/Coinzee Trademark Certificate_page-0002.jpg" alt="Page 2" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bookings Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bookingModalLabel">Schedule a Call</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <iframe 
+          src="https://outlook.office365.com/owa/calendar/SouthernSourcingSupply1@southernsourcingsupply.com/bookings/" 
+          width="100%" 
+          height="600" 
+          frameborder="0" 
+          style="border: none;">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Image Modal -->
+<div class="modal fade" id="productImageModal" tabindex="-1" aria-labelledby="productImageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 position-relative">
+      
+      <!-- Close Button -->
+      <!-- <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close" (click)="closeModal()"></button> -->
+      
+      <div class="modal-body text-center p-0">
+        <model-viewer
+          id="modelViewer"
+          [src]="selectedProduct?.model"
+          alt="3D Product Model"
+          camera-controls
+          auto-rotate
+          ar
+          shadow-intensity="1"
+          style="width: 100%; height: 500px;"
+          class="rounded shadow"
+        >
+        </model-viewer>
+      </div>
+    </div>
+  </div>
+</div>

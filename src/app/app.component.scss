@@ -1,0 +1,178 @@
+/* Navbar wrapper to animate height + background */
+.navbar-wrapper {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+   transition: background-color 0.4s ease, box-shadow 0.4s ease;
+  z-index: 1040;
+}
+
+/* When expanded, show bg and make space for menu */
+.navbar-wrapper.expanded {
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Collapse transition */
+.navbar-collapse {
+transition: height 0.35s ease;
+}
+
+/* Optional: smoother collapse */
+.navbar-collapse.show {
+  max-height: 200px;
+}
+
+/* Push content down */
+
+.custom-navbar {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.85),
+    rgba(245, 248, 255, 0.75)
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.custom-navbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    #0a88ca,
+    #7f5bff,
+    #00e0ff,
+    #0a88ca
+  );
+  background-size: 300% 100%;
+  animation: gradientMove 6s linear infinite;
+  
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% }
+  100% { background-position: 300% }
+}
+.custom-navbar {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+/* Base styles for all nav links */
+.nav-link {
+  position: relative;
+  padding: 5px 12px;
+  border-radius: 10px;
+  letter-spacing: 0.4px;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #0a88ca, #7f5bff);
+  transition: all 0.35s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  display: none !important;
+}
+
+.nav-link:hover::after {
+  width: 70%;
+}
+
+/* Hover effect for all nav links */
+.nav-link:hover {
+  background: rgba(10, 136, 202, 0.08);
+  color: #0a88ca !important;
+  box-shadow: inset 0 0 0 1px rgba(10, 136, 202, 0.25);
+}
+
+/* Active link style */
+.active-link {
+  background: linear-gradient(135deg, #0a88ca, #7f5bff);
+  color: #ffffff !important;
+}
+
+/* Unique style for 'Coinzee' */
+.coinzee-tab {
+  color: #f29d0a;
+  font-weight: bold;
+  position: relative;
+  animation: pulse 1.1s infinite;
+}
+
+@keyframes pulse {
+  0% { text-shadow: 0 0 10px #ffd900; }
+  50% { text-shadow: 0 0 20px #ffae00; }
+  100% { text-shadow: 0 0 10px #ffd900; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.navbar-brand-custom {
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  text-decoration: none;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar-brand-custom:hover {
+  text-shadow: 0 0 15px rgba(127, 91, 255, 0.6);
+}
+
+.navbar-brand-custom img {
+  width: 42px;
+  height: auto;
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand-custom {
+   font-size: 1.15rem;
+  }
+.navbar-brand-custom img {
+    width: 42px;
+  }
+}
+
+.navbar-brand-custom:hover {
+  color: #005f99;
+}
+
+.navbar img {
+  animation: floatLogo 4s ease-in-out infinite;
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Sticky navbar wrapper */
+.sticky-navbar.stuck {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Optional: add shadow when stuck */
+.sticky-navbar.stuck {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

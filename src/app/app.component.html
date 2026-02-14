@@ -1,0 +1,86 @@
+<div class="navbar-wrapper sticky-navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid d-flex justify-content-between align-items-center p-0">
+      <a class="navbar d-flex align-items-center navbar-brand-custom">
+        <img src="assets/images/SSS-removebg-preview.png" alt="Logo" width="50" height="50" class="mx-2">
+        Southern Sourcing Supply
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Close button only in mobile -->
+        <!-- <div class="d-flex justify-content-end p-2 d-lg-none">
+          <button 
+            type="button" 
+            class="btn-close" 
+            aria-label="Close" 
+            (click)="collapseNavbar()">
+          </button>
+        </div> -->
+
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item" *ngFor="let link of navLinks">
+            <a
+              class="nav-link mx-2 text-decoration-none nav-underline"
+              [ngClass]="{
+                'coinzee-tab': link.label === 'Coinzee',
+                'active': isActive(link.path)
+              }"
+              [routerLink]="link.path"
+              routerLinkActive="active-link"
+              (click)="collapseNavbar()"
+            >
+              {{ link.label }}
+            </a>
+          </li>
+          <!-- Logged in: show user initials + session info; otherwise Login -->
+          <li class="nav-item" *ngIf="!(authService.isLoggedIn$ | async)">
+            <a class="nav-link mx-2 text-decoration-none nav-underline" [routerLink]="['/login']" (click)="collapseNavbar()">
+              Login
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="authService.isLoggedIn$ | async">
+            <div class="d-flex align-items-center gap-2 px-2" title="Logged in">
+              <span class="user-initials rounded-circle d-inline-flex align-items-center justify-content-center text-white bg-primary"
+                    style="width: 36px; height: 36px; font-size: 0.85rem; font-weight: 600;">
+                {{ getInitials(authService.getCurrentUser()) }}
+              </span>
+              <span class="d-none d-md-inline text-muted small">
+                {{ getCurrentUserLabel() }}
+              </span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Content Wrapper -->
+<div class="">
+  <!-- Main Content Area -->
+    <div class="content-wrapper">
+      <div
+        [class.pushed]="isNavbarExpanded"
+        [class.push-down]="isNavbarExpanded"
+      >
+        <router-outlet></router-outlet>
+      </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<app-footer class="footer" *ngIf="shouldShowFooter()"></app-footer>

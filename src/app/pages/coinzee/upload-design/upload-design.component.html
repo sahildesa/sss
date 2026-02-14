@@ -1,0 +1,59 @@
+<div class="container-fluid bg-light py-4 px-3" id="uploadDesign">
+    <div class="row gx-4 gy-4 align-items-start">
+        <!-- Main Viewer - First in mobile -->
+        <div class="col-12 col-md-6 order-1 order-md-2">
+            <div #designAreaRef class="bg-white border rounded-3 shadow p-3 position-relative"
+                style="height: 450px; overflow: hidden;">
+                <div *ngIf="loading" class="loading-overlay">
+                    <div class="loading-spinner"></div>
+                    <p class="loading-text mt-3">Loading model... {{ loadingProgress | number:'1.0-0' }}%</p>
+                </div>
+                <canvas id="mainViewerCanvas" #mainViewerCanvas style="display: block;"></canvas>
+            </div>
+        </div>
+
+        <!-- Left Thumbnails - Below main in mobile -->
+        <div class="col-6 col-md-1 order-2 order-md-1 d-flex flex-column gap-3 align-items-center">
+            <div *ngFor="let model of leftThumbnails" class="text-center">
+                <img [src]="model.src" alt="{{ model.label }}" (click)="onSelectModel(model)"
+                    class="img-fluid border rounded" style="cursor: pointer; transition: 0.3s;"
+                    [style.transform]="mainImage === model.src ? 'scale(1.1)' : 'scale(1)'" />
+                <small class="d-block mt-1">{{ model.label }}</small>
+            </div>
+        </div>
+
+        <!-- Right Thumbnails - Below left thumbnails in mobile -->
+        <div class="col-6 col-md-1 order-3 order-md-3 d-flex flex-column gap-3 align-items-center">
+            <div *ngFor="let model of rightThumbnails" class="text-center">
+                <img [src]="model.src" alt="{{ model.label }}" (click)="onSelectModel(model)"
+                    class="img-fluid border rounded" style="cursor: pointer; transition: 0.3s;"
+                    [style.transform]="mainImage === model.src ? 'scale(1.1)' : 'scale(1)'" />
+                <small class="d-block mt-1">{{ model.label }}</small>
+            </div>
+        </div>
+
+        <!-- Settings Panel - Last in mobile -->
+        <div class="col-12 col-md-4 order-4 order-md-4">
+            <div class="bg-white border rounded-3 shadow p-4">
+                <h5 class="fw-bold mb-3">Product Settings</h5>
+
+                <h6 class="fw-semibold mt-4">General Settings</h6>
+
+                <div class="mb-3">
+                    <label class="form-label fw-light small">Product Color:</label>
+                    <input type="color" [(ngModel)]="commonColor" (change)="onCommonColorChange()" autocomplete="off"
+                        class="form-control form-control-color" />
+                </div>
+
+                <button class="btn btn-primary w-100 fw-bold mt-3" (click)="goToCustomize()">
+                    Save and Continue
+                </button>
+
+                <p class="text-muted small mt-2">
+                    * Price varies depending on product type, color, print, and shipping.
+                    <a href="#" class="text-primary">Learn more</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

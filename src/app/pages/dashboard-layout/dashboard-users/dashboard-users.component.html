@@ -1,0 +1,125 @@
+<div class="dashboard-users">
+  <div class="page-header">
+    <h1>Users</h1>
+    <p class="text-muted">Total: {{ count }} users. Sort by clicking column headers.</p>
+    <!-- <button mat-raised-button color="primary" (click)="loadUsers()" [disabled]="isLoading">
+      Refresh
+    </button> -->
+  </div>
+
+  <div *ngIf="errorMessage" class="error-banner">
+    {{ errorMessage }}
+  </div>
+
+  <div class="table-container mat-elevation-z2">
+    <div *ngIf="isLoading" class="table-loading">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading users...</span>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="users-table">
+      <!-- Entity Key -->
+      <ng-container matColumnDef="entityKey">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Entity Key</th>
+        <td mat-cell *matCellDef="let row">{{ row.entityKey || '–' }}</td>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+      </ng-container>
+
+      <!-- First Name -->
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.firstName || '–' }}</td>
+      </ng-container>
+
+      <!-- Last Name -->
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.lastName || '–' }}</td>
+      </ng-container>
+
+      <!-- Company Name -->
+      <ng-container matColumnDef="companyName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+        <td mat-cell *matCellDef="let row">{{ row.companyName || '–' }}</td>
+      </ng-container>
+
+      <!-- Phone -->
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+        <td mat-cell *matCellDef="let row">{{ row.phone || '–' }}</td>
+      </ng-container>
+
+      <!-- Approved Roles -->
+      <ng-container matColumnDef="approvedRoles">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Approved Roles</th>
+        <td mat-cell *matCellDef="let row">{{ formatArray(row.approvedRoles) }}</td>
+      </ng-container>
+
+      <!-- Pending Roles -->
+      <ng-container matColumnDef="pendingRoles">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Pending Roles</th>
+        <td mat-cell *matCellDef="let row">{{ formatArray(row.pendingRoles) }}</td>
+      </ng-container>
+
+      <!-- Roles -->
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Roles</th>
+        <td mat-cell *matCellDef="let row">{{ formatRoles(row.roles) }}</td>
+      </ng-container>
+
+      <!-- About -->
+      <ng-container matColumnDef="about">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>About</th>
+        <td mat-cell *matCellDef="let row">{{ row.about || '–' }}</td>
+      </ng-container>
+
+      <!-- Is Active -->
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Active</th>
+        <td mat-cell *matCellDef="let row">
+          <span [class.badge-active]="row.isActive" [class.badge-inactive]="!row.isActive">
+            {{ row.isActive ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Is Verified -->
+      <ng-container matColumnDef="isVerified">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified</th>
+        <td mat-cell *matCellDef="let row">
+          <span [class.badge-active]="row.isVerified" [class.badge-inactive]="!row.isVerified">
+            {{ row.isVerified ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Is Declined -->
+      <ng-container matColumnDef="isDeclined">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Declined</th>
+        <td mat-cell *matCellDef="let row">
+          <span [class.badge-inactive]="!row.isDeclined" [class.badge-declined]="row.isDeclined">
+            {{ row.isDeclined ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Address -->
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+        <td mat-cell *matCellDef="let row">{{ row.address || '–' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">No users to display.</td>
+      </tr>
+    </table>
+  </div>
+</div>
